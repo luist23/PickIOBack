@@ -1,0 +1,6 @@
+{
+  "files.exclude": {
+    "BaseProject\\bin": true,
+    "BaseProject\\obj": true,
+  }
+}
