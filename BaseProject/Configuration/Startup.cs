@@ -1,5 +1,7 @@
 ﻿using BaseProject.Data;
+using BaseProject.Models.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 namespace BaseProject.Configuration;
@@ -20,13 +22,19 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        Configuration.GetSection(nameof(ProjectAppSettings)).Bind(AppSettings);
-
+        ConfigureBasicServices(services);
         services.AddEndpointsApiExplorer();
-
-        SetDbConnection(services, AppSettings);
         ConfigureSwagger(services, name: "BaseProject", version: "1");
+    }
 
+    public void ConfigureBasicServices(IServiceCollection services)
+    {
+        Configuration.GetSection(nameof(ProjectAppSettings)).Bind(AppSettings);
+        SetDbConnection(services, AppSettings);
+        services
+            .AddIdentity<User, IdentityRole>()
+            .AddEntityFrameworkStores<ProjectDbContext>() // Tu DbContext con Identity
+            .AddDefaultTokenProviders();
     }
 
 
