@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BaseProject.Models.Data;
-using BaseProject.Models.Emuns;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using BaseProject.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace BaseProject.Data;
@@ -20,7 +15,6 @@ public class ProjectDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        ArgumentNullException.ThrowIfNull(modelBuilder);
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<User>()

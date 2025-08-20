@@ -1,4 +1,4 @@
-namespace BaseProject.Models.Emuns;
+namespace BaseProject.Models.Enums;
 
 public enum Role
 {

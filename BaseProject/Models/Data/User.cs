@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BaseProject.Models.Emuns;
+using BaseProject.Models.Enums;
 using BaseProject.Models.Extensions;
 using Microsoft.AspNetCore.Identity;
 
