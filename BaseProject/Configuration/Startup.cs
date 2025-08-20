@@ -1,24 +1,41 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using BaseProject.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace BaseProject.Configuration;
 
-public class Startup(IConfiguration configuration)
+public class Startup
 {
-    #region Config
-
-    private IConfiguration Configuration { get; } = configuration;
-
+    #region Values
+    private ProjectAppSettings AppSettings { get; } = new();
+    private IConfiguration Configuration { get; }
+    #endregion
+    #region Initialization
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+        Configuration.GetSection(nameof(ProjectAppSettings)).Bind(AppSettings);
+    }
     #endregion
 
     public void ConfigureServices(IServiceCollection services)
     {
+        Configuration.GetSection(nameof(ProjectAppSettings)).Bind(AppSettings);
+
         services.AddEndpointsApiExplorer();
 
-        #region swagger
+        SetDbConnection(services, AppSettings);
+        ConfigureSwagger(services, name: "BaseProject", version: "1");
 
+    }
+
+
+    #region ConfigureSwagger
+    private static void ConfigureSwagger(IServiceCollection services, string name, string version = "1")
+    {
         services.AddSwaggerGen(swagger =>
         {
-            swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "BaseProject", Version = "v1" });
+            swagger.SwaggerDoc("v1", new OpenApiInfo { Title = name, Version = version });
             swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "JWT Authorization header using the Bearer scheme.",
@@ -41,7 +58,43 @@ public class Startup(IConfiguration configuration)
                 }
             });
         });
-
-        #endregion
     }
+    #endregion
+
+    public static void SetDbConnection(IServiceCollection services, ProjectAppSettings appSettings)
+    {
+        services.AddDbContext<ProjectDbContext>(options => DbApplyOptions(options, appSettings.ConnectionStrings));
+    }
+
+    public static DbContextOptionsBuilder<ProjectDbContext> GetDbOption(ConnectionAppSettings connectionStrings)
+    {
+        var options = new DbContextOptionsBuilder<ProjectDbContext>();
+        DbApplyOptions(options, connectionStrings);
+        return options;
+    }
+
+    public static void DbApplyOptions(DbContextOptionsBuilder options, ConnectionAppSettings connectionStrings)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        ArgumentNullException.ThrowIfNull(connectionStrings);
+        switch (connectionStrings?.TypeConnection)
+        {
+            case "MySQL":
+                options.UseMySql(connectionStrings.MySQL, ServerVersion.AutoDetect(connectionStrings.MySQL));
+                break;
+            case "SQLServer":
+                options.UseSqlServer(connectionStrings.SQLServer, sqlServerOptions =>
+                {
+                    sqlServerOptions.CommandTimeout(120);
+                });
+                options.EnableSensitiveDataLogging();
+                break;
+            case "SQLite":
+                options.UseSqlite(connectionStrings.SQLite);
+                break;
+            default:
+                break;
+        }
+    }
+
 }

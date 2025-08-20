@@ -1,6 +1,7 @@
 {
   "files.exclude": {
     "BaseProject\\bin": true,
-    "BaseProject\\obj": true,
-  }
+    "BaseProject\\obj": true
+  },
+  "editor.semanticHighlighting.enabled": true
 }
