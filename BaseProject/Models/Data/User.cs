@@ -1,4 +1,3 @@
-using BaseProject.Models.Enums;
 using BaseProject.Models.Extensions;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,6 +10,7 @@ public class User : IdentityUser
     private string _lastName = string.Empty;
     #endregion
 
+    #region Attributes
     public string Name
     {
         get => _name;
@@ -23,8 +23,7 @@ public class User : IdentityUser
         set => _lastName = value.NormalizeText();
     }
 
-    public Role Role { get; set; } = Role.User;
-
     public bool Active { get; set; } = true;
+    #endregion
 
 }

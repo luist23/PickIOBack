@@ -1,24 +1,18 @@
 using BaseProject.Commands;
 using BaseProject.Configuration;
+using BaseProject.Migrations.Seeders;
 
 internal class Program
 {
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
         var startup = new Startup(builder.Configuration);
+        startup.ConfigureBasicServices(builder.Services);
 
-        if (args.Contains("add-admin"))
-        {
-            using var scope = builder.Services.BuildServiceProvider().CreateScope();
-            var command = scope.ServiceProvider.GetRequiredService<UserCommand>();
-            await command.RunAddAdminCommandAsync();
-            return;
-        }
+        if (!await ExecuteCommands(args, builder).ConfigureAwait(false)) return;
 
         startup.ConfigureServices(builder.Services);
-
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -49,8 +43,27 @@ internal class Program
             .WithName("GetWeatherForecast")
             .WithOpenApi();
 
-        await app.RunAsync();
+        await app.RunAsync().ConfigureAwait(false);
     }
+
+    #region Extras
+    public static async Task<bool> ExecuteCommands(string[] args, WebApplicationBuilder builder)
+    {
+        if (args.Contains("add-admin"))
+        {
+            var serviceProvider = builder.Build().Services;
+            await UserCommand.RunAddAdminCommandAsync(serviceProvider).ConfigureAwait(false);
+            return false;
+        }
+        if (args.Contains("seeders"))
+        {
+            var serviceProvider = builder.Build().Services;
+            await RoleSeeder.SeedAsync(serviceProvider).ConfigureAwait(false);
+            return false;
+        }
+        return true;
+    }
+    #endregion
 }
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

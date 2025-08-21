@@ -1,25 +1,19 @@
 using BaseProject.Models.Data;
-using BaseProject.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BaseProject.Data;
 
-public class ProjectDbContext : DbContext
+public class ProjectDbContext : IdentityDbContext<User, Role, string>
 {
-    public DbSet<User> Users { get; set; } = null!;
-
     public ProjectDbContext(DbContextOptions options) : base(options)
     {
-        this.Database.SetCommandTimeout(120);
+        Database.SetCommandTimeout(120);
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<User>()
-            .Property(u => u.Role)
-            .HasConversion(new EnumToStringConverter<Role>());
+        base.OnModelCreating(builder);
     }
 
 }

@@ -1,5 +1,6 @@
+[Migrations/**/*.cs]
+dotnet_diagnostic.CA1062.severity = none
 [Migrations/*.cs]
 dotnet_diagnostic.CA1062.severity = none
-
 [Data/ProjectDbContext.cs]
 dotnet_diagnostic.CA1062.severity = none

@@ -1,47 +1,93 @@
+using BaseProject.Data;
 using BaseProject.Models.Data;
-using BaseProject.Models.Enums;
+using BaseProject.Models.Helpers;
 using Figgle.Fonts;
 using Microsoft.AspNetCore.Identity;
 
 namespace BaseProject.Commands;
 
-public class UserCommand(UserManager<User> userManager)
+public static class UserCommand
 {
-    public async Task RunAddAdminCommandAsync()
+    public static async Task RunAddAdminCommandAsync(IServiceProvider serviceProvider)
+    {
+        var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+        var context = serviceProvider.GetRequiredService<ProjectDbContext>();
+        await CreateSuperAdminAsync(userManager, roleManager, context).ConfigureAwait(false);
+    }
+
+#pragma warning disable CA1303
+    private static async Task CreateSuperAdminAsync(
+        UserManager<User> userManager,
+        RoleManager<Role> roleManager,
+        ProjectDbContext dbContext
+    )
     {
         Console.WriteLine(FiggleFonts.Standard.Render("ControlTower"));
         Console.WriteLine("Creando un nuevo SuperAdmin...");
 
-        Console.Write("Nombre de usuario: ");
-        var username = Console.ReadLine();
-        Console.Write("Nombre: ");
-        var name = Console.ReadLine();
-        Console.Write("Apellido: ");
-        var lastName = Console.ReadLine();
-        Console.Write("Contraseña: ");
-        var password = Console.ReadLine();
-
-        var user = new User
+        var roleName = "SuperAdmin";
+        if (!await roleManager.RoleExistsAsync(roleName).ConfigureAwait(false))
         {
-            UserName = username ?? "",
-            Name = name ?? "",
-            LastName = lastName ?? "",
-            Role = Role.SuperAdmin,
-            Active = true
-        };
-
-        var result = await userManager.CreateAsync(user, password ?? "");
-        if (result.Succeeded)
-        {
-            Console.WriteLine("✅ SuperAdmin creado exitosamente.");
-        }
-        else
-        {
-            Console.WriteLine("❌ Error al crear el SuperAdmin:");
-            foreach (var error in result.Errors)
+            await roleManager.CreateAsync(new Role
             {
-                Console.WriteLine($"- {error.Description}");
+                Name = roleName,
+                LevelAccess = 100
+            }).ConfigureAwait(false);
+        }
+
+        Console.Write("Nombre de usuario: ");
+        var username = Console.ReadLine() ?? "";
+        Console.Write("Nombre: ");
+        var name = Console.ReadLine() ?? "";
+        Console.Write("Apellido: ");
+        var lastName = Console.ReadLine() ?? "";
+        Console.Write("Contraseña: ");
+        var password = Console.ReadLine() ?? "";
+
+        await TransactionHelper.ExecuteInTransactionAsync(dbContext, async () =>
+        {
+
+            var existingUser = await userManager.FindByNameAsync(username).ConfigureAwait(false);
+            if (existingUser != null)
+            {
+                Console.WriteLine("❌ El usuario ya existe.");
+                return;
             }
+
+            var user = new User
+            {
+                UserName = username,
+                Name = name,
+                LastName = lastName,
+                Active = true
+            };
+
+            var result = await userManager.CreateAsync(user, password).ConfigureAwait(false);
+            EnsureSucceeded(result, $"❌ Error al crear el usuario: {username}");
+
+            var roleAssignResult = await userManager.AddToRoleAsync(user, roleName).ConfigureAwait(false);
+            EnsureSucceeded(roleAssignResult, $"❌ Error al asignar rol al usuario: {username}");
+
+            Console.WriteLine("✅ SuperAdmin creado y asignado al rol correctamente.");
+
+        },
+        e => Console.WriteLine($"❌ Error en la transacción:\n{e}")
+        ).ConfigureAwait(false);
+
+
+    }
+
+#pragma warning restore CA1303
+
+
+    private static void EnsureSucceeded(IdentityResult result, string contextMessage)
+    {
+        if (!result.Succeeded)
+        {
+            var errors = string.Join("\n", result.Errors.Select(e => $"- {e.Description}"));
+            throw new InvalidOperationException($"{contextMessage} \nDetalles:\n{errors}");
         }
     }
+
 }

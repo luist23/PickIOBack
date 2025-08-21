@@ -1,7 +1,7 @@
 ﻿using BaseProject.Data;
 using BaseProject.Models.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 namespace BaseProject.Configuration;
@@ -12,6 +12,7 @@ public class Startup
     private ProjectAppSettings AppSettings { get; } = new();
     private IConfiguration Configuration { get; }
     #endregion
+
     #region Initialization
     public Startup(IConfiguration configuration)
     {
@@ -20,23 +21,25 @@ public class Startup
     }
     #endregion
 
+    #region Configure Services
     public void ConfigureServices(IServiceCollection services)
     {
-        ConfigureBasicServices(services);
         services.AddEndpointsApiExplorer();
         ConfigureSwagger(services, name: "BaseProject", version: "1");
     }
+    #endregion
 
+    #region Configure BasicServices
     public void ConfigureBasicServices(IServiceCollection services)
     {
         Configuration.GetSection(nameof(ProjectAppSettings)).Bind(AppSettings);
         SetDbConnection(services, AppSettings);
         services
-            .AddIdentity<User, IdentityRole>()
-            .AddEntityFrameworkStores<ProjectDbContext>() // Tu DbContext con Identity
+            .AddIdentity<User, Role>()
+            .AddEntityFrameworkStores<ProjectDbContext>()
             .AddDefaultTokenProviders();
     }
-
+    #endregion
 
     #region ConfigureSwagger
     private static void ConfigureSwagger(IServiceCollection services, string name, string version = "1")
@@ -69,6 +72,7 @@ public class Startup
     }
     #endregion
 
+    #region Configure DB
     public static void SetDbConnection(IServiceCollection services, ProjectAppSettings appSettings)
     {
         services.AddDbContext<ProjectDbContext>(options => DbApplyOptions(options, appSettings.ConnectionStrings));
@@ -104,5 +108,6 @@ public class Startup
                 break;
         }
     }
+    #endregion
 
 }

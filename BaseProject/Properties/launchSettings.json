@@ -19,6 +19,14 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    "add-admin": {
+      "commandName": "Project",
+      "commandLineArgs": "add-admin",
+    },
+    "seeders": {
+      "commandName": "Project",
+      "commandLineArgs": "seeders",
+    },
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
