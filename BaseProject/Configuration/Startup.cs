@@ -84,7 +84,7 @@ public class Startup
 
     #region Configure DB
 
-    public static void SetDbConnection(IServiceCollection services, ProjectAppSettings appSettings)
+    private static void SetDbConnection(IServiceCollection services, ProjectAppSettings appSettings)
     {
         services.AddDbContext<ProjectDbContext>(options => DbApplyOptions(options, appSettings.ConnectionStrings));
     }
@@ -96,7 +96,7 @@ public class Startup
         return options;
     }
 
-    public static void DbApplyOptions(DbContextOptionsBuilder options, ConnectionAppSettings connectionStrings)
+    private static void DbApplyOptions(DbContextOptionsBuilder options, ConnectionAppSettings connectionStrings)
     {
         ArgumentNullException.ThrowIfNull(options);
         ArgumentNullException.ThrowIfNull(connectionStrings);

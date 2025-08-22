@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BaseProject.Data;
 
-public class ProjectDbContext : IdentityDbContext<User, Role, string>
+public sealed class ProjectDbContext : IdentityDbContext<User, Role, string>
 {
     public ProjectDbContext(DbContextOptions options) : base(options)
     {
@@ -15,5 +15,4 @@ public class ProjectDbContext : IdentityDbContext<User, Role, string>
     {
         base.OnModelCreating(builder);
     }
-
 }
