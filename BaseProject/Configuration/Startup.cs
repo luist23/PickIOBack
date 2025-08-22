@@ -9,27 +9,34 @@ namespace BaseProject.Configuration;
 public class Startup
 {
     #region Values
+
     private ProjectAppSettings AppSettings { get; } = new();
     private IConfiguration Configuration { get; }
+
     #endregion
 
     #region Initialization
+
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
-        Configuration.GetSection(nameof(ProjectAppSettings)).Bind(AppSettings);
+        Configuration.Bind(AppSettings);
     }
+
     #endregion
 
     #region Configure Services
+
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
         ConfigureSwagger(services, name: "BaseProject", version: "1");
     }
+
     #endregion
 
     #region Configure BasicServices
+
     public void ConfigureBasicServices(IServiceCollection services)
     {
         Configuration.GetSection(nameof(ProjectAppSettings)).Bind(AppSettings);
@@ -39,9 +46,11 @@ public class Startup
             .AddEntityFrameworkStores<ProjectDbContext>()
             .AddDefaultTokenProviders();
     }
+
     #endregion
 
     #region ConfigureSwagger
+
     private static void ConfigureSwagger(IServiceCollection services, string name, string version = "1")
     {
         services.AddSwaggerGen(swagger =>
@@ -70,9 +79,11 @@ public class Startup
             });
         });
     }
+
     #endregion
 
     #region Configure DB
+
     public static void SetDbConnection(IServiceCollection services, ProjectAppSettings appSettings)
     {
         services.AddDbContext<ProjectDbContext>(options => DbApplyOptions(options, appSettings.ConnectionStrings));
@@ -95,10 +106,8 @@ public class Startup
                 options.UseMySql(connectionStrings.MySQL, ServerVersion.AutoDetect(connectionStrings.MySQL));
                 break;
             case "SQLServer":
-                options.UseSqlServer(connectionStrings.SQLServer, sqlServerOptions =>
-                {
-                    sqlServerOptions.CommandTimeout(120);
-                });
+                options.UseSqlServer(connectionStrings.SQLServer,
+                    sqlServerOptions => { sqlServerOptions.CommandTimeout(120); });
                 options.EnableSensitiveDataLogging();
                 break;
             case "SQLite":
@@ -108,6 +117,6 @@ public class Startup
                 break;
         }
     }
-    #endregion
 
+    #endregion
 }
