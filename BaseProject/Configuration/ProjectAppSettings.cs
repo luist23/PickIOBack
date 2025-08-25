@@ -2,10 +2,10 @@ namespace BaseProject.Configuration;
 
 public partial class ProjectAppSettings
 {
-    public ConnectionAppSettings ConnectionStrings { get; set; } = new ConnectionAppSettings();
+    public ConnectionAppSettings ConnectionStrings { get; set; } = new();
     public string TokenKey { get; set; } = string.Empty;
     public string Environment { get; set; } = string.Empty;
-
+    public JwtAppSettings Jwt { get; set; } = new();
 }
 
 public class ConnectionAppSettings
@@ -14,4 +14,13 @@ public class ConnectionAppSettings
     public string SQLServer { get; set; } = string.Empty;
     public string MySQL { get; set; } = string.Empty;
     public string SQLite { get; set; } = "Data Source=SQLite.db";
+}
+
+public class JwtAppSettings
+{
+    public string Key { set; get; } = "23-SuperClaveSecretaQueDebeSerLargaYSegura123!";
+    public string Issuer { set; get; } = string.Empty;
+    public string Audience { set; get; } = string.Empty;
+    public int SessionExpirationMinutes { set; get; } = 30;
+    public int TokenExpirationMinutes { set; get; } = 30;
 }

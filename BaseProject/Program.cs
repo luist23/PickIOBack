@@ -14,6 +14,7 @@ internal class Program
 
         startup.ConfigureServices(builder.Services);
         var app = builder.Build();
+        startup.ConfigureMiddlewares(app: app);
 
         if (app.Environment.IsDevelopment())
         {
@@ -47,6 +48,7 @@ internal class Program
     }
 
     #region Extras
+
     public static async Task<bool> ExecuteCommands(string[] args, WebApplicationBuilder builder)
     {
         if (args.Contains("add-admin"))
@@ -55,14 +57,17 @@ internal class Program
             await UserCommand.RunAddAdminCommandAsync(serviceProvider).ConfigureAwait(false);
             return false;
         }
+
         if (args.Contains("seeders"))
         {
             var serviceProvider = builder.Build().Services;
             await RoleSeeder.SeedAsync(serviceProvider).ConfigureAwait(false);
             return false;
         }
+
         return true;
     }
+
     #endregion
 }
 

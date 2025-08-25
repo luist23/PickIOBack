@@ -1,4 +1,5 @@
 ﻿using BaseProject.Data;
+using BaseProject.Middlewares;
 using BaseProject.Models.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +40,7 @@ public class Startup
 
     public void ConfigureBasicServices(IServiceCollection services)
     {
-        Configuration.GetSection(nameof(ProjectAppSettings)).Bind(AppSettings);
+        services.AddSingleton(AppSettings);
         SetDbConnection(services, AppSettings);
         services
             .AddIdentity<User, Role>()
@@ -48,6 +49,11 @@ public class Startup
     }
 
     #endregion
+
+    public void ConfigureMiddlewares(WebApplication app)
+    {
+        app.UseMiddleware<SessionTokenMiddleware>();
+    }
 
     #region ConfigureSwagger
 

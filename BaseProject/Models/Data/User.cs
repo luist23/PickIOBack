@@ -13,6 +13,7 @@ public class User : IdentityUser
     private string _lastName = string.Empty;
 
     public const int NameLength = 255;
+    public const int GuidLength = 36;
 
     #endregion
 
@@ -33,6 +34,10 @@ public class User : IdentityUser
         get => _lastName;
         set => _lastName = value.NormalizeText();
     }
+
+    [AttMaxLength(GuidLength)] public string? SessionToken { get; set; }
+
+    public DateTime? SessionTokenExpiry { get; set; }
 
     public bool Active { get; set; } = true;
 
