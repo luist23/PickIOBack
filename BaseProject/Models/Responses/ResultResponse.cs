@@ -42,4 +42,12 @@ public class ResultResponse
             },
         };
     }
+
+    public static JsonResult ErrorResponse(string error, int codeError = 400)
+    {
+        return new JsonResult(new { Error = error })
+        {
+            StatusCode = codeError
+        };
+    }
 }
