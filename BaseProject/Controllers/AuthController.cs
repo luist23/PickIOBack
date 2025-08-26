@@ -7,9 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BaseProject.Controllers;
 
+[ApiController]
+[Route("api/auth")]
 public class AuthController(AuthService authService) : ControllerBase
 {
     [HttpPost("login")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
     public async Task<JsonResult> Login([FromBody] LoginRequest request)
     {
         var res = await authService.Login(request: request).ConfigureAwait(false);
@@ -18,6 +22,9 @@ public class AuthController(AuthService authService) : ControllerBase
 
     [HttpPost("logout")]
     [Authorize]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
     public async Task<JsonResult> Logout()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

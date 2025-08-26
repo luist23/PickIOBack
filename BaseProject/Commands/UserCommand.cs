@@ -23,9 +23,9 @@ public static class UserCommand
         ProjectDbContext dbContext
     )
     {
-        Console.WriteLine(FiggleFonts.Standard.Render("ControlTower"));
+        Console.WriteLine(FiggleFonts.Standard.Render("BaseProyect"));
         Console.WriteLine("Creando un nuevo SuperAdmin...");
-
+ 
         var roleName = "SuperAdmin";
         if (!await roleManager.RoleExistsAsync(roleName).ConfigureAwait(false))
         {

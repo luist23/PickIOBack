@@ -28,7 +28,7 @@ public class ResultResponse
             {
                 StatusCode = codeError
             },
-            Error error => new JsonResult(new { Error = error.Result })
+            Error error => new JsonResult(new { Errors = new List<string> { error.Result } })
             {
                 StatusCode = codeError
             },
@@ -45,7 +45,7 @@ public class ResultResponse
 
     public static JsonResult ErrorResponse(string error, int codeError = 400)
     {
-        return new JsonResult(new { Error = error })
+        return new JsonResult(new { Errors = new List<string> { error } })
         {
             StatusCode = codeError
         };

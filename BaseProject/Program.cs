@@ -2,7 +2,9 @@ using BaseProject.Commands;
 using BaseProject.Configuration;
 using BaseProject.Migrations.Seeders;
 
-internal class Program
+namespace BaseProject;
+
+internal static class Program
 {
     public static async Task Main(string[] args)
     {
@@ -14,7 +16,6 @@ internal class Program
 
         startup.ConfigureServices(builder.Services);
         var app = builder.Build();
-        startup.ConfigureMiddlewares(app: app);
 
         if (app.Environment.IsDevelopment())
         {
@@ -28,6 +29,11 @@ internal class Program
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
+
+        app.MapControllers();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        Startup.ConfigureMiddlewares(app: app);
 
         app.MapGet("/weatherforecast", () =>
             {

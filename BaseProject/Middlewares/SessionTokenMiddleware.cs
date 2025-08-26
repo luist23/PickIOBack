@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BaseProject.Middlewares;
 
-public class SessionTokenMiddleware(RequestDelegate next, UserManager<User> userManager)
+public class SessionTokenMiddleware(RequestDelegate next)
 {
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, UserManager<User> userManager)
     {
         if (context.User.Identity?.IsAuthenticated == true)
         {

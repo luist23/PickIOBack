@@ -1,8 +1,12 @@
-﻿using BaseProject.Data;
+﻿using System.Text;
+using BaseProject.Data;
 using BaseProject.Middlewares;
 using BaseProject.Models.Data;
+using BaseProject.Services.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace BaseProject.Configuration;
@@ -30,8 +34,11 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddControllers();
         services.AddEndpointsApiExplorer();
         ConfigureSwagger(services, name: "BaseProject", version: "1");
+        ConfigureDataServices(services: services);
+        ConfigureAuthentication(services: services, appSettings: AppSettings);
     }
 
     #endregion
@@ -50,10 +57,43 @@ public class Startup
 
     #endregion
 
-    public void ConfigureMiddlewares(WebApplication app)
+    public static void ConfigureMiddlewares(WebApplication app)
     {
         app.UseMiddleware<SessionTokenMiddleware>();
     }
+
+    private static void ConfigureDataServices(IServiceCollection services)
+    {
+        services.AddScoped<AuthService>();
+    }
+
+    #region ConfigureAuthentication
+
+    private static void ConfigureAuthentication(IServiceCollection services, ProjectAppSettings appSettings)
+    {
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                // ValidateIssuer = true,
+                // ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = appSettings.Jwt.Issuer,
+                ValidAudience = appSettings.Jwt.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(appSettings.Jwt.Key))
+            };
+        });
+    }
+
+    #endregion
 
     #region ConfigureSwagger
 
@@ -104,8 +144,6 @@ public class Startup
 
     private static void DbApplyOptions(DbContextOptionsBuilder options, ConnectionAppSettings connectionStrings)
     {
-        ArgumentNullException.ThrowIfNull(options);
-        ArgumentNullException.ThrowIfNull(connectionStrings);
         switch (connectionStrings?.TypeConnection)
         {
             case "MySQL":
