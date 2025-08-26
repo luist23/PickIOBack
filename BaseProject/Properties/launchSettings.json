@@ -21,11 +21,11 @@
     },
     "add-admin": {
       "commandName": "Project",
-      "commandLineArgs": "add-admin",
+      "commandLineArgs": "add-admin"
     },
     "seeders": {
       "commandName": "Project",
-      "commandLineArgs": "seeders",
+      "commandLineArgs": "seeders"
     },
     "https": {
       "commandName": "Project",

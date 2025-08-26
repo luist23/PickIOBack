@@ -70,6 +70,7 @@ namespace BaseProject.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
@@ -80,6 +81,7 @@ namespace BaseProject.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
@@ -100,6 +102,13 @@ namespace BaseProject.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SessionToken")
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("SessionTokenExpiry")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")

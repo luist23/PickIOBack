@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseProject.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20250821204823_Initial")]
-    partial class Initial
+    [Migration("20250826201946_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,6 +73,7 @@ namespace BaseProject.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
@@ -83,6 +84,7 @@ namespace BaseProject.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
@@ -103,6 +105,13 @@ namespace BaseProject.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SessionToken")
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("SessionTokenExpiry")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")
