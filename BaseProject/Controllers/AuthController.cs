@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
+using BaseProject.Models.Contracts;
 using BaseProject.Models.Requests;
-using BaseProject.Models.Responses;
 using BaseProject.Services.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,7 @@ public class AuthController(AuthService authService) : ControllerBase
     public async Task<JsonResult> Login([FromBody] LoginRequest request)
     {
         var res = await authService.Login(request: request).ConfigureAwait(false);
-        return ResultResponse.JsonResponse(res);
+        return ProjectController.JsonResponse<string>(res);
     }
 
     [HttpPost("logout")]
@@ -28,8 +28,8 @@ public class AuthController(AuthService authService) : ControllerBase
     public async Task<JsonResult> Logout()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null) return ResultResponse.ErrorResponse("No se encontro usuario", 401);
+        if (userId == null) return ProjectController.Reject("No se encontro usuario", ApiCodes.ErrorCode.UnAuthorized);
         var res = await authService.Logout(userId).ConfigureAwait(false);
-        return ResultResponse.JsonResponse(res);
+        return ProjectController.JsonResponse<string>(res);
     }
 }

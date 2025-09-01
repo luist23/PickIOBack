@@ -2,9 +2,10 @@
 using System.Security.Claims;
 using System.Text;
 using BaseProject.Configuration;
+using BaseProject.Models.Contracts;
+using BaseProject.Models.Contracts.Responses;
 using BaseProject.Models.Data;
 using BaseProject.Models.Requests;
-using BaseProject.Models.Responses;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,13 +16,14 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
     public async Task<ResultResponse> Login(LoginRequest request)
     {
         var user = await userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
-        if (user == null) return new ResultResponse.Error("Usuario no encontrado");
+        if (user == null)
+            return new ResultResponse.ErrorApi("Usuario no encontrado", nameof(request.UserName));
 
         var result = await signInManager
             .CheckPasswordSignInAsync(user, request.Password, false)
             .ConfigureAwait(false);
-        
-        if (!result.Succeeded) return new ResultResponse.Error("Credenciales inválidas");
+
+        if (!result.Succeeded) return new ResultResponse.ErrorApi("Credenciales inválidas", nameof(request.Password));
 
         var sessionToken = Guid.NewGuid().ToString("N");
         user.SessionToken = sessionToken;
@@ -54,7 +56,7 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
     public async Task<ResultResponse> Logout(string userName)
     {
         var user = await userManager.FindByIdAsync(userName).ConfigureAwait(false);
-        if (user == null) return new ResultResponse.Error("Usuario no encontrado");
+        if (user == null) return new ResultResponse.ErrorApi("Usuario no encontrado", nameof(User.UserName));
 
         user.SessionToken = null;
         user.SessionTokenExpiry = null;
