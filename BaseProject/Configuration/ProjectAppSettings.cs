@@ -11,9 +11,9 @@ public partial class ProjectAppSettings
 public class ConnectionAppSettings
 {
     public string TypeConnection { get; set; } = "SQLite";
-    public string SQLServer { get; set; } = string.Empty;
-    public string MySQL { get; set; } = string.Empty;
-    public string SQLite { get; set; } = "Data Source=SQLite.db";
+    public string SqlServer { get; set; } = string.Empty;
+    public string MySql { get; set; } = string.Empty;
+    public string SqLite { get; set; } = "Data Source=SQLite.db";
 }
 
 public class JwtAppSettings

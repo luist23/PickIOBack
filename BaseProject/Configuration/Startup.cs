@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
+// using Microsoft.OpenApi.Models;
 
 namespace BaseProject.Configuration;
 
@@ -109,7 +110,7 @@ public class Startup
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey
             });
-            swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+            /*swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
@@ -118,11 +119,12 @@ public class Startup
                         {
                             Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
-                        }
+                        },
+                        
                     },
                     Array.Empty<string>()
                 }
-            });
+            });*/
         });
     }
 
@@ -144,18 +146,18 @@ public class Startup
 
     private static void DbApplyOptions(DbContextOptionsBuilder options, ConnectionAppSettings connectionStrings)
     {
-        switch (connectionStrings?.TypeConnection)
+        switch (connectionStrings.TypeConnection)
         {
-            case "MySQL":
-                options.UseMySql(connectionStrings.MySQL, ServerVersion.AutoDetect(connectionStrings.MySQL));
+            case "MySql":
+                options.UseMySql(connectionStrings.MySql, ServerVersion.AutoDetect(connectionStrings.MySql));
                 break;
-            case "SQLServer":
-                options.UseSqlServer(connectionStrings.SQLServer,
+            case "SqlServer":
+                options.UseSqlServer(connectionStrings.SqlServer,
                     sqlServerOptions => { sqlServerOptions.CommandTimeout(120); });
                 options.EnableSensitiveDataLogging();
                 break;
-            case "SQLite":
-                options.UseSqlite(connectionStrings.SQLite);
+            case "SqLite":
+                options.UseSqlite(connectionStrings.SqLite);
                 break;
             default:
                 break;
