@@ -1,6 +1,8 @@
 namespace BaseProject.Configuration;
 
-public partial class ProjectAppSettings
+#pragma warning disable CA1515
+public class ProjectAppSettings
+#pragma warning restore CA1515
 {
     public ConnectionAppSettings ConnectionStrings { get; set; } = new();
     public string TokenKey { get; set; } = string.Empty;
@@ -8,7 +10,9 @@ public partial class ProjectAppSettings
     public JwtAppSettings Jwt { get; set; } = new();
 }
 
+#pragma warning disable CA1515
 public class ConnectionAppSettings
+#pragma warning restore CA1515
 {
     public string TypeConnection { get; set; } = "SQLite";
     public string SqlServer { get; set; } = string.Empty;
@@ -16,7 +20,9 @@ public class ConnectionAppSettings
     public string SqLite { get; set; } = "Data Source=SQLite.db";
 }
 
+#pragma warning disable CA1515
 public class JwtAppSettings
+#pragma warning restore CA1515
 {
     public string Key { set; get; } = "23-SuperClaveSecretaQueDebeSerLargaYSegura123!";
     public string Issuer { set; get; } = string.Empty;

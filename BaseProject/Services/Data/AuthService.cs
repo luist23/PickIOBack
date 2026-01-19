@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Text;
 using BaseProject.Configuration;
-using BaseProject.Models.Contracts;
 using BaseProject.Models.Contracts.Responses;
 using BaseProject.Models.Data;
 using BaseProject.Models.Requests;
