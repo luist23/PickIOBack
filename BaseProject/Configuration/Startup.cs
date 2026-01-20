@@ -40,6 +40,7 @@ public class Startup
         ConfigureSwagger(services, name: "BaseProject", version: "1");
         ConfigureDataServices(services: services);
         ConfigureAuthentication(services: services, appSettings: AppSettings);
+        ConfigureAuthorization(services: services);
     }
 
     #endregion
@@ -91,6 +92,17 @@ public class Startup
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(appSettings.Jwt.Key))
             };
+        });
+    }
+
+    private static void ConfigureAuthorization(IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            foreach (var permission in Permissions.GetAll())
+            {
+                options.AddPolicy(permission, policy => policy.RequireClaim("Permission", permission));
+            }
         });
     }
 

@@ -10,9 +10,21 @@ public sealed class ProjectDbContext : IdentityDbContext<User, Role, string>
     {
         Database.SetCommandTimeout(120);
     }
+    
+    public DbSet<UserSession> UserSessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<UserSession>()
+            .HasIndex(s => s.Token)
+            .IsUnique();
+
+        builder.Entity<User>()
+            .HasMany(u => u.Sessions)
+            .WithOne(s => s.User)
+            .HasForeignKey(s => s.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

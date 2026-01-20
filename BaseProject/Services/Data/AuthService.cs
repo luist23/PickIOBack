@@ -7,10 +7,17 @@ using BaseProject.Models.Data;
 using BaseProject.Models.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using BaseProject.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseProject.Services.Data;
 
-public class AuthService(UserManager<User> userManager, SignInManager<User> signInManager, ProjectAppSettings settings)
+public class AuthService(
+    UserManager<User> userManager,
+    SignInManager<User> signInManager,
+    ProjectAppSettings settings,
+    ProjectDbContext context
+)
 {
     public async Task<ResultResponse> Login(LoginRequest request)
     {
@@ -25,10 +32,33 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
         if (!result.Succeeded) return new ResultResponse.ErrorApi("Credenciales inválidas", nameof(request.Password));
 
         var sessionToken = Guid.NewGuid().ToString("N");
-        user.SessionToken = sessionToken;
-        user.SessionTokenExpiry = DateTime.UtcNow.AddMinutes(settings.Jwt.SessionExpirationMinutes);
 
-        await userManager.UpdateAsync(user).ConfigureAwait(false);
+        // Gestionar sesiones activas
+        var activeSessions = await context.UserSessions
+            .Where(x => x.UserId == user.Id)
+            .OrderBy(x => x.LastActivity)
+            .ToListAsync()
+            .ConfigureAwait(false);
+
+        if (activeSessions.Count >= settings.Jwt.MaxActiveSessions)
+        {
+            // Eliminar la más antigua (por actividad)
+            var oldestSession = activeSessions.First();
+            context.UserSessions.Remove(oldestSession);
+        }
+
+        // Crear nueva sesión
+        var newSession = new UserSession
+        {
+            UserId = user.Id,
+            Token = sessionToken,
+            Expired = DateTime.UtcNow.AddMinutes(settings.Jwt.SessionExpirationMinutes),
+            LastActivity = DateTime.UtcNow,
+            DeviceInfo = "Unknown" // Podría venir del request
+        };
+
+        context.UserSessions.Add(newSession);
+        await context.SaveChangesAsync().ConfigureAwait(false);
 
         var claims = new List<Claim>
         {
@@ -52,14 +82,18 @@ public class AuthService(UserManager<User> userManager, SignInManager<User> sign
         return new ResultResponse.Success<string>(tokenString);
     }
 
-    public async Task<ResultResponse> Logout(string userName)
+    public async Task<ResultResponse> Logout(string userName, string sessionToken)
     {
         var user = await userManager.FindByIdAsync(userName).ConfigureAwait(false);
         if (user == null) return new ResultResponse.ErrorApi("Usuario no encontrado", nameof(User.UserName));
 
-        user.SessionToken = null;
-        user.SessionTokenExpiry = null;
-        await userManager.UpdateAsync(user).ConfigureAwait(false);
+        var sessions = context.UserSessions
+            .FirstOrDefault(s => s.UserId == user.Id && s.Token == sessionToken);
+
+        if (sessions == null) return new ResultResponse.Success<string>("Sesión cerrada");
+
+        context.UserSessions.Remove(sessions);
+        await context.SaveChangesAsync().ConfigureAwait(false);
 
         return new ResultResponse.Success<string>("Sesión cerrada");
     }

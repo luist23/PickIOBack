@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using BaseProject.Models.Attributes;
 using BaseProject.Models.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -8,9 +7,6 @@ namespace BaseProject.Models.Data;
 public class User : IdentityUser
 {
     #region Values
-
-    private string _name = string.Empty;
-    private string _lastName = string.Empty;
 
     public const int NameLength = 255;
     public const int GuidLength = 36;
@@ -23,21 +19,19 @@ public class User : IdentityUser
     [AttMaxLength(NameLength)]
     public string Name
     {
-        get => _name;
-        set => _name = value.NormalizeText();
-    }
+        get;
+        set => field = value.NormalizeText();
+    } = string.Empty;
 
     [AttRequired]
     [AttMaxLength(NameLength)]
     public string LastName
     {
-        get => _lastName;
-        set => _lastName = value.NormalizeText();
-    }
+        get;
+        set => field = value.NormalizeText();
+    } = string.Empty;
 
-    [AttMaxLength(GuidLength)] public string? SessionToken { get; set; }
-
-    public DateTime? SessionTokenExpiry { get; set; }
+    public virtual ICollection<UserSession> Sessions { get; set; } = [];
 
     public bool Active { get; set; } = true;
 

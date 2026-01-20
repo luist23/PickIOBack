@@ -28,8 +28,9 @@ public class AuthController(AuthService authService) : ControllerBase
     public async Task<JsonResult> Logout()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null) return ProjectController.Reject("No se encontro usuario", ApiCodes.ErrorCode.UnAuthorized);
-        var res = await authService.Logout(userId).ConfigureAwait(false);
+        var session = User.FindFirstValue("session_token");
+        if (userId == null || session == null) return ProjectController.Reject("No se encontro usuario", ApiCodes.ErrorCode.UnAuthorized);
+        var res = await authService.Logout(userId, session).ConfigureAwait(false);
         return ProjectController.JsonResponse<string>(res);
     }
 }

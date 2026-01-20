@@ -29,4 +29,5 @@ public class JwtAppSettings
     public string Audience { set; get; } = string.Empty;
     public int SessionExpirationMinutes { set; get; } = 30;
     public int TokenExpirationMinutes { set; get; } = 30;
+    public int MaxActiveSessions { get; set; } = 3;
 }

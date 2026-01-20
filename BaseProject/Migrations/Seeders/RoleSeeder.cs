@@ -1,5 +1,7 @@
 using BaseProject.Models.Data;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using BaseProject.Configuration;
 
 namespace BaseProject.Migrations.Seeders;
 
@@ -16,8 +18,54 @@ public static class RoleSeeder
         };
 
         foreach (var role in roles.Where(r => r.Name != null))
-            if (!await roleManager.RoleExistsAsync(role.Name ?? "").ConfigureAwait(false))
+        {
+            if (!await roleManager.RoleExistsAsync(role.Name!).ConfigureAwait(false))
+            {
                 await roleManager.CreateAsync(role).ConfigureAwait(false);
+            }
+            
+            // Seed Claims
+            var existingRole = await roleManager.FindByNameAsync(role.Name!).ConfigureAwait(false);
+            if (existingRole != null)
+            {
+                await SeedClaimsForRole(roleManager, existingRole);
+            }
+        }
+    }
+
+    private static async Task SeedClaimsForRole(RoleManager<Role> roleManager, Role role)
+    {
+        var claims = await roleManager.GetClaimsAsync(role);
+        var permissions = new List<string>();
+
+        if (role.Name == Role.SuperAdmin)
+        {
+            permissions.AddRange(Permissions.GetAll());
+        }
+        else if (role.Name == Role.Admin)
+        {
+            // Admin gets all Product and User permissions
+            permissions.Add(Permissions.Products.Read);
+            permissions.Add(Permissions.Products.Create);
+            permissions.Add(Permissions.Products.Edit);
+            permissions.Add(Permissions.Products.Delete);
+            permissions.Add(Permissions.Users.Read);
+            permissions.Add(Permissions.Users.Create);
+            permissions.Add(Permissions.Users.Edit); // Admin can edit users
+        }
+        else if (role.Name == Role.User)
+        {
+            // User only reads products
+            permissions.Add(Permissions.Products.Read);
+        }
+
+        foreach (var permission in permissions)
+        {
+            if (!claims.Any(c => c.Type == "Permission" && c.Value == permission))
+            {
+                await roleManager.AddClaimAsync(role, new Claim("Permission", permission));
+            }
+        }
     }
 
 }
