@@ -26,8 +26,7 @@ public class AuthService(
             return new ResultResponse.ErrorApi("Usuario no encontrado", nameof(request.UserName));
 
         var result = await signInManager
-            .CheckPasswordSignInAsync(user, request.Password, false)
-            ;
+            .CheckPasswordSignInAsync(user, request.Password, false);
 
         if (!result.Succeeded) return new ResultResponse.ErrorApi("Credenciales inválidas", nameof(request.Password));
 
@@ -87,12 +86,12 @@ public class AuthService(
         var user = await userManager.FindByIdAsync(userName);
         if (user == null) return new ResultResponse.ErrorApi("Usuario no encontrado", nameof(User.UserName));
 
-        var sessions = context.UserSessions
+        var session = context.UserSessions
             .FirstOrDefault(s => s.UserId == user.Id && s.Token == sessionToken);
 
-        if (sessions == null) return new ResultResponse.Success<string>("Sesión cerrada");
+        if (session == null) return new ResultResponse.Success<string>("Sesión cerrada");
 
-        context.UserSessions.Remove(sessions);
+        context.UserSessions.Remove(session);
         await context.SaveChangesAsync();
 
         return new ResultResponse.Success<string>("Sesión cerrada");

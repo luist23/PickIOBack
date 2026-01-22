@@ -11,6 +11,12 @@ public class SessionTokenMiddleware(RequestDelegate next, ProjectAppSettings set
 {
     public async Task InvokeAsync(HttpContext context,  ProjectDbContext db)
     {
+        if (context.Request.Path.StartsWithSegments("/api/auth/logout", StringComparison.OrdinalIgnoreCase))
+        {
+            await next(context);
+            return;
+        }
+
         if (context.User.Identity?.IsAuthenticated == true)
         {
             var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -23,8 +29,7 @@ public class SessionTokenMiddleware(RequestDelegate next, ProjectAppSettings set
             }
 
             var session =  await db.UserSessions
-                .FirstOrDefaultAsync(e=> e.UserId == userId && e.Token == sessionToken)
-                ;
+                .FirstOrDefaultAsync(e=> e.UserId == userId && e.Token == sessionToken);
 
             if (session == null || session.Expired < DateTime.UtcNow)
             {
