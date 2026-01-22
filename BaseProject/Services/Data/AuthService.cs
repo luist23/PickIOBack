@@ -36,8 +36,7 @@ public class AuthService(
         var activeSessions = await context.UserSessions
             .Where(x => x.UserId == user.Id)
             .OrderBy(x => x.LastActivity)
-            .ToListAsync()
-            ;
+            .ToListAsync();
 
         if (activeSessions.Count >= settings.Jwt.MaxActiveSessions)
         {

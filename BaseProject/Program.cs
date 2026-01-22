@@ -26,10 +26,10 @@ internal static class Program
         app.UseHttpsRedirection();
 
       
-        app.MapControllers();
         app.UseAuthentication();
         app.UseAuthorization();
         Startup.ConfigureMiddlewares(app: app);
+        app.MapControllers();
         
         await app.RunAsync();
     }

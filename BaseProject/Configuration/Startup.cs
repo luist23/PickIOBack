@@ -83,8 +83,8 @@ public class Startup
             options.SaveToken = true;
             options.TokenValidationParameters = new TokenValidationParameters()
             {
-                // ValidateIssuer = true,
-                // ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = appSettings.Jwt.Issuer,
@@ -122,7 +122,7 @@ public class Startup
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey
             });
-            /*swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+            swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
@@ -131,12 +131,11 @@ public class Startup
                         {
                             Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
-                        },
-                        
+                        }
                     },
                     Array.Empty<string>()
                 }
-            });*/
+            });
         });
     }
 
