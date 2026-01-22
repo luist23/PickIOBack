@@ -21,13 +21,13 @@ public class AuthService(
 {
     public async Task<ResultResponse> Login(LoginRequest request)
     {
-        var user = await userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+        var user = await userManager.FindByNameAsync(request.UserName);
         if (user == null)
             return new ResultResponse.ErrorApi("Usuario no encontrado", nameof(request.UserName));
 
         var result = await signInManager
             .CheckPasswordSignInAsync(user, request.Password, false)
-            .ConfigureAwait(false);
+            ;
 
         if (!result.Succeeded) return new ResultResponse.ErrorApi("Credenciales inválidas", nameof(request.Password));
 
@@ -38,7 +38,7 @@ public class AuthService(
             .Where(x => x.UserId == user.Id)
             .OrderBy(x => x.LastActivity)
             .ToListAsync()
-            .ConfigureAwait(false);
+            ;
 
         if (activeSessions.Count >= settings.Jwt.MaxActiveSessions)
         {
@@ -58,7 +58,7 @@ public class AuthService(
         };
 
         context.UserSessions.Add(newSession);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        await context.SaveChangesAsync();
 
         var claims = new List<Claim>
         {
@@ -84,7 +84,7 @@ public class AuthService(
 
     public async Task<ResultResponse> Logout(string userName, string sessionToken)
     {
-        var user = await userManager.FindByIdAsync(userName).ConfigureAwait(false);
+        var user = await userManager.FindByIdAsync(userName);
         if (user == null) return new ResultResponse.ErrorApi("Usuario no encontrado", nameof(User.UserName));
 
         var sessions = context.UserSessions
@@ -93,7 +93,7 @@ public class AuthService(
         if (sessions == null) return new ResultResponse.Success<string>("Sesión cerrada");
 
         context.UserSessions.Remove(sessions);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        await context.SaveChangesAsync();
 
         return new ResultResponse.Success<string>("Sesión cerrada");
     }

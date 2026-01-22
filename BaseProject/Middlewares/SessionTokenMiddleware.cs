@@ -18,26 +18,26 @@ public class SessionTokenMiddleware(RequestDelegate next, ProjectAppSettings set
 
             if (userId == null || sessionToken == null)
             {
-                await context.Response.WriteAsync("Sesión inválida").ConfigureAwait(false);
+                await context.Response.WriteAsync("Sesión inválida");
                 return;
             }
 
             var session =  await db.UserSessions
                 .FirstOrDefaultAsync(e=> e.UserId == userId && e.Token == sessionToken)
-                .ConfigureAwait(false);
+                ;
 
             if (session == null || session.Expired < DateTime.UtcNow)
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("Sesión expirada o inválida").ConfigureAwait(false);
+                await context.Response.WriteAsync("Sesión expirada o inválida");
                 return;
             }
 
             session.LastActivity = DateTime.UtcNow;
             session.Expired = DateTime.UtcNow.AddMinutes(settings.Jwt.SessionExpirationMinutes);
-            await db.SaveChangesAsync().ConfigureAwait(false);
+            await db.SaveChangesAsync();
         }
 
-        await next(context).ConfigureAwait(false);
+        await next(context);
     }
 }

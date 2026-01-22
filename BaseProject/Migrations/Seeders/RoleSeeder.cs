@@ -19,13 +19,13 @@ public static class RoleSeeder
 
         foreach (var role in roles.Where(r => r.Name != null))
         {
-            if (!await roleManager.RoleExistsAsync(role.Name!).ConfigureAwait(false))
+            if (!await roleManager.RoleExistsAsync(role.Name!))
             {
-                await roleManager.CreateAsync(role).ConfigureAwait(false);
+                await roleManager.CreateAsync(role);
             }
             
             // Seed Claims
-            var existingRole = await roleManager.FindByNameAsync(role.Name!).ConfigureAwait(false);
+            var existingRole = await roleManager.FindByNameAsync(role.Name!);
             if (existingRole != null)
             {
                 await SeedClaimsForRole(roleManager, existingRole);

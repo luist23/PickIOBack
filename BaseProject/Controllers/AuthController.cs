@@ -16,7 +16,7 @@ public class AuthController(AuthService authService) : ControllerBase
     [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
     public async Task<JsonResult> Login([FromBody] LoginRequest request)
     {
-        var res = await authService.Login(request: request).ConfigureAwait(false);
+        var res = await authService.Login(request: request);
         return ProjectController.JsonResponse<string>(res);
     }
 
@@ -30,7 +30,7 @@ public class AuthController(AuthService authService) : ControllerBase
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var session = User.FindFirstValue("session_token");
         if (userId == null || session == null) return ProjectController.Reject("No se encontro usuario", ApiCodes.ErrorCode.UnAuthorized);
-        var res = await authService.Logout(userId, session).ConfigureAwait(false);
+        var res = await authService.Logout(userId, session);
         return ProjectController.JsonResponse<string>(res);
     }
 }

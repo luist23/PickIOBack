@@ -30,7 +30,7 @@ public class ValidateSessionAttribute : Attribute, IAsyncAuthorizationFilter
 
         var session = await dbContext.UserSessions
             .FirstOrDefaultAsync(s => s.Token == sessionToken)
-            .ConfigureAwait(false);
+            ;
 
         if (session == null || session.Expired < DateTime.UtcNow)
         {
@@ -43,6 +43,6 @@ public class ValidateSessionAttribute : Attribute, IAsyncAuthorizationFilter
 
         await dbContext
             .SaveChangesAsync()
-            .ConfigureAwait(false);
+            ;
     }
 }

@@ -13,7 +13,7 @@ public static class UserCommand
         var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
         var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
         var context = serviceProvider.GetRequiredService<ProjectDbContext>();
-        await CreateSuperAdminAsync(userManager, roleManager, context).ConfigureAwait(false);
+        await CreateSuperAdminAsync(userManager, roleManager, context);
     }
 
 #pragma warning disable CA1303
@@ -27,13 +27,13 @@ public static class UserCommand
         Console.WriteLine("Creando un nuevo SuperAdmin...");
  
         var roleName = "SuperAdmin";
-        if (!await roleManager.RoleExistsAsync(roleName).ConfigureAwait(false))
+        if (!await roleManager.RoleExistsAsync(roleName))
         {
             await roleManager.CreateAsync(new Role
             {
                 Name = roleName,
                 LevelAccess = 100
-            }).ConfigureAwait(false);
+            });
         }
 
         Console.Write("Nombre de usuario: ");
@@ -48,7 +48,7 @@ public static class UserCommand
         await TransactionHelper.ExecuteInTransactionAsync(dbContext, async () =>
         {
 
-            var existingUser = await userManager.FindByNameAsync(username).ConfigureAwait(false);
+            var existingUser = await userManager.FindByNameAsync(username);
             if (existingUser != null)
             {
                 Console.WriteLine("❌ El usuario ya existe.");
@@ -63,17 +63,17 @@ public static class UserCommand
                 Active = true
             };
 
-            var result = await userManager.CreateAsync(user, password).ConfigureAwait(false);
+            var result = await userManager.CreateAsync(user, password);
             EnsureSucceeded(result, $"❌ Error al crear el usuario: {username}");
 
-            var roleAssignResult = await userManager.AddToRoleAsync(user, roleName).ConfigureAwait(false);
+            var roleAssignResult = await userManager.AddToRoleAsync(user, roleName);
             EnsureSucceeded(roleAssignResult, $"❌ Error al asignar rol al usuario: {username}");
 
             Console.WriteLine("✅ SuperAdmin creado y asignado al rol correctamente.");
 
         },
         e => Console.WriteLine($"❌ Error en la transacción:\n{e}")
-        ).ConfigureAwait(false);
+        );
 
 
     }
@@ -83,11 +83,9 @@ public static class UserCommand
 
     private static void EnsureSucceeded(IdentityResult result, string contextMessage)
     {
-        if (!result.Succeeded)
-        {
-            var errors = string.Join("\n", result.Errors.Select(e => $"- {e.Description}"));
-            throw new InvalidOperationException($"{contextMessage} \nDetalles:\n{errors}");
-        }
+        if (result.Succeeded) return;
+        var errors = string.Join("\n", result.Errors.Select(e => $"- {e.Description}"));
+        throw new InvalidOperationException($"{contextMessage} \nDetalles:\n{errors}");
     }
 
 }

@@ -12,7 +12,7 @@ internal static class Program
         var startup = new Startup(builder.Configuration);
         startup.ConfigureBasicServices(builder.Services);
 
-        if (!await ExecuteCommands(args, builder).ConfigureAwait(false)) return;
+        if (!await ExecuteCommands(args, builder)) return;
 
         startup.ConfigureServices(builder.Services);
         var app = builder.Build();
@@ -50,7 +50,7 @@ internal static class Program
             .WithName("GetWeatherForecast")
             .WithOpenApi();
 
-        await app.RunAsync().ConfigureAwait(false);
+        await app.RunAsync();
     }
 
     #region Extras
@@ -60,14 +60,14 @@ internal static class Program
         if (args.Contains("add-admin"))
         {
             var serviceProvider = builder.Build().Services;
-            await UserCommand.RunAddAdminCommandAsync(serviceProvider).ConfigureAwait(false);
+            await UserCommand.RunAddAdminCommandAsync(serviceProvider);
             return false;
         }
 
         if (args.Contains("seeders"))
         {
             var serviceProvider = builder.Build().Services;
-            await RoleSeeder.SeedAsync(serviceProvider).ConfigureAwait(false);
+            await RoleSeeder.SeedAsync(serviceProvider);
             return false;
         }
 
