@@ -1,8 +1,4 @@
-﻿using System.Security.Claims;
-using BaseProject.Models.Contracts;
-using BaseProject.Models.Requests;
-using BaseProject.Services.Data;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BaseProject.Controllers;
