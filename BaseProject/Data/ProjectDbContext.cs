@@ -1,4 +1,5 @@
 using BaseProject.Models.Data;
+using BaseProject.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -26,5 +27,37 @@ public sealed class ProjectDbContext : IdentityDbContext<User, Role, string>
             .WithOne(s => s.User)
             .HasForeignKey(s => s.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    public override int SaveChanges()
+    {
+        UpdateTimestamps();
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        UpdateTimestamps();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void UpdateTimestamps()
+    {
+        var entries = ChangeTracker.Entries()
+            .Where(e => e.Entity is IHasTimestamps && (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+        var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+        foreach (var entry in entries)
+        {
+            var entity = (IHasTimestamps)entry.Entity;
+
+            if (entry.State == EntityState.Added)
+            {
+                entity.CreateAt = now;
+            }
+
+            entity.UpdateAt = now;
+        }
     }
 }

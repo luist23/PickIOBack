@@ -66,6 +66,7 @@ public class Startup
     private static void ConfigureDataServices(IServiceCollection services)
     {
         services.AddScoped<AuthService>();
+        services.AddScoped<BarCodeService>();
     }
 
     #region ConfigureAuthentication

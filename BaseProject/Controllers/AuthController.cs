@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using BaseProject.Configuration;
 using BaseProject.Models.Contracts;
 using BaseProject.Models.Requests;
 using BaseProject.Services.Data;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BaseProject.Controllers;
 
 [ApiController]
-[Route("api/auth")]
+[Route(Routes.AuthApiRoute)]
 public class AuthController(AuthService authService) : ControllerBase
 {
     [HttpPost("login")]
