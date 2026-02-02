@@ -14,20 +14,16 @@ public class BarCodeService(ProjectDbContext context)
     public IOrderedQueryable<BarCode> GetAll(BarCodeFilter filter)
     {
         var query = context.Set<BarCode>().AsQueryable();
-        var search = filter.Search?.ToLowerUi();
-        if (!search.IsNullOrEmpty())
+        var search = filter.Search;
+        if (!string.IsNullOrEmpty(search))
         {
-            query = query.Where(x => x.Code.ToLower().Contains(search) || x.InternalCode.ToLower().Contains(search));
+            query = query.Where(x => x.Code.Contains(search) || x.InternalCode.Contains(search));
         }
         
 
         if (filter.LastSync.HasValue)
         {
-            if (DateTime.TryParseExact(filter.LastSync.Value.ToString(), "yyyyMMddHHmmss", null, System.Globalization.DateTimeStyles.None, out var date))
-            {
-                 var unixDate = ((DateTimeOffset)date).ToUnixTimeSeconds();
-                 query = query.Where(x => x.UpdateAt > unixDate);
-            }
+             query = query.Where(x => x.UpdateAt > filter.LastSync.Value);
         }
 
         return query.OrderBy(x => x.Code);
@@ -87,7 +83,7 @@ public class BarCodeService(ProjectDbContext context)
         // Just marking as modified will trigger UpdateAt in DbContext, but if no properties changed, EF might ignore it.
         // So we explicitly set UpdateAt here to ensure it changes, although DbContext overrides it.
         // Actually, to ensure DbContext sees a change if we just want to "touch" it:
-        existing.UpdateAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(); 
+        existing.Update(); 
         
         context.Set<BarCode>().Update(existing);
         await context.SaveChangesAsync();

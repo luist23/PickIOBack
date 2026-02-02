@@ -1,5 +1,4 @@
 using BaseProject.Models.Data;
-using BaseProject.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -44,13 +43,13 @@ public sealed class ProjectDbContext : IdentityDbContext<User, Role, string>
     private void UpdateTimestamps()
     {
         var entries = ChangeTracker.Entries()
-            .Where(e => e.Entity is IHasTimestamps && (e.State == EntityState.Added || e.State == EntityState.Modified));
+            .Where(e => e.Entity is TimeStampedModel && (e.State == EntityState.Added || e.State == EntityState.Modified));
 
-        var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var now = long.Parse(DateTime.UtcNow.ToString("yyyyMMddHHmmss"));
 
         foreach (var entry in entries)
         {
-            var entity = (IHasTimestamps)entry.Entity;
+            var entity = (TimeStampedModel)entry.Entity;
 
             if (entry.State == EntityState.Added)
             {

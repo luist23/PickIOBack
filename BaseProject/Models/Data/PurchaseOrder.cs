@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BaseProject.Models.Interfaces;
 using BaseProject.Models.Attributes;
 using BaseProject.Models.Enums;
 using BaseProject.Models.Utils;
@@ -9,7 +8,7 @@ using BaseProject.Models.Utils;
 namespace BaseProject.Models.Data;
 
 [Table("purchaseorder")]
-public class PurchaseOrder :  IHasTimestamps
+public class PurchaseOrder :  TimeStampedModel
 {
     #region Attibutes
 
@@ -27,9 +26,6 @@ public class PurchaseOrder :  IHasTimestamps
     [AttMaxLength(50)] public string? SyncUser { get; set; }
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
     [AttMaxLength(50)] public string? User { set; get; }
-    
-    public long UpdateAt { get; set; }
-    public long CreateAt { get; set; }
 
     #endregion
 

@@ -1,13 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BaseProject.Models.Interfaces;
 using BaseProject.Models.Attributes;
 using BaseProject.Models.Enums;
 
 namespace BaseProject.Models.Data;
 
 [Table("product")]
-public class Product : IHasTimestamps
+public class Product : TimeStampedModel
 {
     #region Attibutes
 
@@ -16,10 +15,6 @@ public class Product : IHasTimestamps
     [AttMaxLength(150)] [AttRequired] public string Detail { set; get; } = string.Empty;
     [AttMaxLength(20)] public string? Location { set; get; } // whareHouseCode AisleNumber RackNumber TypeRack(A,B) Level
     [AttRequired] public ProductType Type { set; get; } = ProductType.Default;
-
-    public bool Active { set; get; } = true;
-    public long UpdateAt { get; set; }
-    public long CreateAt { get; set; }
 
     #endregion
 
