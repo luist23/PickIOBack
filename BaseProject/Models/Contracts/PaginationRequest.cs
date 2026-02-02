@@ -2,20 +2,17 @@
 
 public abstract class PaginationRequest
 {
-    private int _size = 10;
-    private int _page = 1;
-
     public int Size
     {
-        get => _size;
-        set => _size = SizeValidation(value);
-    }
+        get;
+        init => field = SizeValidation(value);
+    } = 10;
 
     public int Page
     {
-        get => _page;
-        set => _page = PageValidation(value);
-    }
+        get;
+        init => field = PageValidation(value);
+    } = 1;
 
     private static int SizeValidation(int size)
     {
@@ -32,14 +29,4 @@ public abstract class PaginationRequest
         size = Size;
         page = Page;
     }
-
-    // public int getPosition()
-    // {
-    //     return Size * Page;
-    // }
-    //
-    // public int getSkip()
-    // {
-    //     return Size * (Page - 1);
-    // }
 }

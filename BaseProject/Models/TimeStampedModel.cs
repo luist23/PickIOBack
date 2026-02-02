@@ -1,6 +1,6 @@
 using BaseProject.Models.Utils;
 
-namespace BaseProject.Models.Data;
+namespace BaseProject.Models;
 
 public abstract class TimeStampedModel
 {
@@ -10,22 +10,18 @@ public abstract class TimeStampedModel
 
     public void Update()
     {
-        UpdateAt = long.Parse(DateTime.UtcNow.ToString("yyyyMMddHHmmss"));
+        UpdateAt = TimeUtil.GetTimeLong();
     }
 
-    public void Delete(bool soft = true)
+    public void Delete(bool delete = true)
     {
-        if (soft)
+        if (delete)
         {
-            DeleteAt = long.Parse(DateTime.UtcNow.ToString("yyyyMMddHHmmss"));
+            DeleteAt = TimeUtil.GetTimeLong();
         }
         else
         {
-            // Hard delete logic usually handled by repository/context removal, 
-            // but for the model state, we might just mark it. 
-            // However, typically 'Delete(false)' might imply we want to clear it or it's just a flag.
-            // Given the context, we'll just set the timestamp.
-            DeleteAt = long.Parse(DateTime.UtcNow.ToString("yyyyMMddHHmmss"));
+            DeleteAt = null;
         }
     }
 }

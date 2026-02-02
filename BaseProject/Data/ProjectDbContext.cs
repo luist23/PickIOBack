@@ -1,3 +1,4 @@
+using BaseProject.Models;
 using BaseProject.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

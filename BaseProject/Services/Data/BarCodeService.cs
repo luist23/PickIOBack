@@ -15,15 +15,15 @@ public class BarCodeService(ProjectDbContext context)
     {
         var query = context.Set<BarCode>().AsQueryable();
         var search = filter.Search;
+        var lastSync = filter.LastSync;
         if (!string.IsNullOrEmpty(search))
         {
             query = query.Where(x => x.Code.Contains(search) || x.InternalCode.Contains(search));
         }
         
-
-        if (filter.LastSync.HasValue)
+        if (lastSync.HasValue)
         {
-             query = query.Where(x => x.UpdateAt > filter.LastSync.Value);
+             query = query.Where(x => x.UpdateAt > lastSync.Value);
         }
 
         return query.OrderBy(x => x.Code);
@@ -64,30 +64,10 @@ public class BarCodeService(ProjectDbContext context)
         }
         
         existing.InternalCode = barcodeDto.InternalCode;
-        // Timestamps handled by DbContext
         
         context.Set<BarCode>().Update(existing);
         await context.SaveChangesAsync();
         
-        return new ResultResponse.Success<BarCode>(existing);
-    }
-
-    public async Task<ResultResponse> ManualUpdate(string code)
-    {
-        var existing = await context.Set<BarCode>().FindAsync(code);
-        if (existing == null)
-        {
-            return new ResultResponse.Error("Barcode not found");
-        }
-
-        // Just marking as modified will trigger UpdateAt in DbContext, but if no properties changed, EF might ignore it.
-        // So we explicitly set UpdateAt here to ensure it changes, although DbContext overrides it.
-        // Actually, to ensure DbContext sees a change if we just want to "touch" it:
-        existing.Update(); 
-        
-        context.Set<BarCode>().Update(existing);
-        await context.SaveChangesAsync();
-
         return new ResultResponse.Success<BarCode>(existing);
     }
     
@@ -98,7 +78,19 @@ public class BarCodeService(ProjectDbContext context)
         {
             return new ResultResponse.Error("Barcode not found");
         }
+        existing.Delete(existing.DeleteAt == null);
+        await context.SaveChangesAsync();
         
+        return new ResultResponse.Success<string>("Barcode deleted");
+    }
+    
+    public async Task<ResultResponse> Destroy(string code)
+    {
+        var existing = await context.Set<BarCode>().FindAsync(code);
+        if (existing == null)
+        {
+            return new ResultResponse.Error("Barcode not found");
+        }
         context.Set<BarCode>().Remove(existing);
         await context.SaveChangesAsync();
         

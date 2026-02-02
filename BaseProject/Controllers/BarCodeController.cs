@@ -12,9 +12,9 @@ namespace BaseProject.Controllers;
 public class BarCodeController(BarCodeService service) : ControllerBase
 {
     [HttpGet]
-    public JsonResult Get([FromQuery] BarCodeFilter filter)
+    public JsonResult Get([FromQuery] BarCodeFilter request)
     {
-        return ProjectController.RespondPagination(service.GetAll(filter), filter);
+        return ProjectController.RespondPagination(service.GetAll(request), request);
     }
 
     [HttpGet("{code}")]
@@ -34,16 +34,16 @@ public class BarCodeController(BarCodeService service) : ControllerBase
     {
         return ProjectController.JsonResponse<BarCode>(await service.Update(code, barcode));
     }
-    
-    [HttpPost("{code}/manual-update")]
-    public async Task<JsonResult> ManualUpdate(string code)
-    {
-        return ProjectController.JsonResponse<BarCode>(await service.ManualUpdate(code));
-    }
 
     [HttpDelete("{code}")]
     public async Task<JsonResult> Delete(string code)
     {
         return ProjectController.JsonResponse<string>(await service.Delete(code));
+    }
+
+    [HttpDelete("destroy/{code}")]
+    public async Task<JsonResult> Destroy(string code)
+    {
+        return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
 }
