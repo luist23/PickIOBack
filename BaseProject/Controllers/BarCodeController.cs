@@ -12,6 +12,7 @@ namespace BaseProject.Controllers;
 public class BarCodeController(BarCodeService service) : ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<BarCode>), 200)]
     public JsonResult Get([FromQuery] BarCodeFilter request)
     {
         return ProjectController.RespondPagination(service.GetAll(request), request);

@@ -4,7 +4,7 @@ using BaseProject.Models.Attributes;
 
 namespace BaseProject.Models.Data;
 
-[Table("barcode")]
+[Table(nameof(BarCode))]
 public class BarCode : TimeStampedModel
 {
     #region Attibutes
@@ -22,5 +22,4 @@ public class BarCode : TimeStampedModel
     public string InternalCode { get; set; } = string.Empty;
 
     #endregion
-    
 }

@@ -5,7 +5,7 @@ using BaseProject.Models.Enums;
 
 namespace BaseProject.Models.Data;
 
-[Table("saleorderlog")]
+[Table(nameof(SaleOrderLog))]
 public class SaleOrderLog
 {
     #region Attibutes

@@ -3,7 +3,7 @@ using BaseProject.Models.Attributes;
 
 namespace BaseProject.Models.Data;
 
-[Table("aisle")]
+[Table(nameof(Aisle))]
 public class Aisle
 {
     private const int NameLength = 50;
@@ -29,6 +29,4 @@ public class Aisle
     public virtual WareHouse? WareHouseInfo { set; get; }
 
     #endregion
-
-   
 }

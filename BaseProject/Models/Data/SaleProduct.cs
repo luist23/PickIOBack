@@ -4,7 +4,7 @@ using BaseProject.Models.Attributes;
 
 namespace BaseProject.Models.Data;
 
-[Table("saleproduct")]
+[Table(nameof(SaleProduct))]
 public class SaleProduct
 {
     #region Attibutes

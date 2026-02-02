@@ -5,7 +5,7 @@ using BaseProject.Models.Extensions;
 
 namespace BaseProject.Models.Data;
 
-[Table("justification")]
+[Table(nameof(Justification))]
 public class Justification :  TimeStampedModel
 {
     #region Values

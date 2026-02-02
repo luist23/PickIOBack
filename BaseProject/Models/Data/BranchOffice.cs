@@ -4,7 +4,7 @@ using BaseProject.Models.Attributes;
 
 namespace BaseProject.Models.Data;
 
-[Table("branch_offices")]
+[Table(nameof(BranchOffice))]
 public class BranchOffice :  TimeStampedModel
 {
     #region Attributes

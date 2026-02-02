@@ -5,7 +5,7 @@ using BaseProject.Models.Enums;
 
 namespace BaseProject.Models.Data;
 
-[Table("product")]
+[Table(nameof(Product))]
 public class Product : TimeStampedModel
 {
     #region Attibutes

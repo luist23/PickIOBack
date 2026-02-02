@@ -1,5 +1,6 @@
 using BaseProject.Models;
 using BaseProject.Models.Data;
+using BaseProject.Models.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -11,8 +12,23 @@ public sealed class ProjectDbContext : IdentityDbContext<User, Role, string>
     {
         Database.SetCommandTimeout(120);
     }
-    
+
+    public DbSet<Aisle> Aisles { get; set; }
+    public DbSet<BarCode> BarCodes { get; set; }
+    public DbSet<BranchOffice> BranchOffices { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Justification> Justifications { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Provider> Providers { get; set; }
+    public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+    public DbSet<PurchaseProduct> PurchaseProducts { get; set; }
+    public DbSet<SaleOrder> SaleOrders { get; set; }
+    public DbSet<SaleOrderLog> SaleOrderLogs { get; set; }
+    public DbSet<SaleOrderStatus> SaleOrderStatutes { get; set; }
+    public DbSet<SaleProduct> SaleProducts { get; set; }
+    public DbSet<SaleProductSerial> SaleProductSerials { get; set; }
     public DbSet<UserSession> UserSessions { get; set; }
+    public DbSet<WareHouse> WareHouses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -44,9 +60,10 @@ public sealed class ProjectDbContext : IdentityDbContext<User, Role, string>
     private void UpdateTimestamps()
     {
         var entries = ChangeTracker.Entries()
-            .Where(e => e.Entity is TimeStampedModel && (e.State == EntityState.Added || e.State == EntityState.Modified));
+            .Where(e => e.Entity is TimeStampedModel &&
+                        (e.State == EntityState.Added || e.State == EntityState.Modified));
 
-        var now = long.Parse(DateTime.UtcNow.ToString("yyyyMMddHHmmss"));
+        var now = TimeUtil.GetTimeLong();
 
         foreach (var entry in entries)
         {

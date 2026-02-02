@@ -4,7 +4,7 @@ using BaseProject.Models.Attributes;
 
 namespace BaseProject.Models.Data;
 
-[Table("customer")]
+[Table(nameof(Customer))]
 public class Customer :  TimeStampedModel
 {
     public const int CodeLength = 16;

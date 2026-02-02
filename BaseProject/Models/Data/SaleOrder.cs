@@ -7,7 +7,7 @@ using BaseProject.Models.Utils;
 
 namespace BaseProject.Models.Data;
 
-[Table("saleorder")]
+[Table(nameof(SaleOrder))]
 public class SaleOrder : TimeStampedModel
 {
     #region Attibutes

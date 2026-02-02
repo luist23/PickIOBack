@@ -6,7 +6,7 @@ using BaseProject.Models.Utils;
 
 namespace BaseProject.Models.Data;
 
-[Table("warehouse")]
+[Table(nameof(WareHouse))]
 public class WareHouse :  TimeStampedModel
 {
     public const int CodeLength = 5;

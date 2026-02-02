@@ -4,7 +4,7 @@ using BaseProject.Models.Attributes;
 
 namespace BaseProject.Models.Data;
 
-[Table("provider")]
+[Table(nameof(Provider))]
 public class Provider : TimeStampedModel
 {
     #region Attibutes

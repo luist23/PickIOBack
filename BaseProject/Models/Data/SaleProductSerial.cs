@@ -4,7 +4,7 @@ using BaseProject.Models.Attributes;
 
 namespace BaseProject.Models.Data;
 
-[Table("sale_product_serial")]
+[Table(nameof(SaleProductSerial))]
 public class SaleProductSerial
 {
     [Key, Column(Order = 0)] public int SaleOrderId { get; set; }

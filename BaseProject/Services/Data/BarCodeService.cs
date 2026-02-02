@@ -13,7 +13,7 @@ public class BarCodeService(ProjectDbContext context)
 
     public IOrderedQueryable<BarCode> GetAll(BarCodeFilter filter)
     {
-        var query = context.Set<BarCode>().AsQueryable();
+        var query = context.BarCodes.AsQueryable();
         var search = filter.Search;
         var lastSync = filter.LastSync;
         if (!string.IsNullOrEmpty(search))
@@ -31,7 +31,7 @@ public class BarCodeService(ProjectDbContext context)
     
     public async Task<ResultResponse> GetByCode(string code)
     {
-        var barcode = await context.Set<BarCode>().FindAsync(code);
+        var barcode = await context.BarCodes.FindAsync(code);
         if (barcode == null)
         {
             return new ResultResponse.Error("Barcode not found");
@@ -41,15 +41,14 @@ public class BarCodeService(ProjectDbContext context)
     
     public async Task<ResultResponse> Create(BarCodeDto barcodeDto)
     {
-        if (await context.Set<BarCode>().AnyAsync(x => x.Code == barcodeDto.Code))
+        if (await context.BarCodes.AnyAsync(x => x.Code == barcodeDto.Code))
         {
             return new ResultResponse.Error($"Barcode {barcodeDto.Code} already exists");
         }
 
         var barcode = barcodeDto.ToEntity();
-        // Timestamps handled by DbContext
         
-        await context.Set<BarCode>().AddAsync(barcode);
+        await context.BarCodes.AddAsync(barcode);
         await context.SaveChangesAsync();
         
         return new ResultResponse.Success<BarCode>(barcode);
@@ -57,7 +56,7 @@ public class BarCodeService(ProjectDbContext context)
     
     public async Task<ResultResponse> Update(string code, BarCodeDto barcodeDto)
     {
-        var existing = await context.Set<BarCode>().FindAsync(code);
+        var existing = await context.BarCodes.FindAsync(code);
         if (existing == null)
         {
             return new ResultResponse.Error("Barcode not found");
@@ -65,7 +64,7 @@ public class BarCodeService(ProjectDbContext context)
         
         existing.InternalCode = barcodeDto.InternalCode;
         
-        context.Set<BarCode>().Update(existing);
+        context.BarCodes.Update(existing);
         await context.SaveChangesAsync();
         
         return new ResultResponse.Success<BarCode>(existing);
@@ -73,7 +72,7 @@ public class BarCodeService(ProjectDbContext context)
     
     public async Task<ResultResponse> Delete(string code)
     {
-        var existing = await context.Set<BarCode>().FindAsync(code);
+        var existing = await context.BarCodes.FindAsync(code);
         if (existing == null)
         {
             return new ResultResponse.Error("Barcode not found");
@@ -86,12 +85,12 @@ public class BarCodeService(ProjectDbContext context)
     
     public async Task<ResultResponse> Destroy(string code)
     {
-        var existing = await context.Set<BarCode>().FindAsync(code);
+        var existing = await context.BarCodes.FindAsync(code);
         if (existing == null)
         {
             return new ResultResponse.Error("Barcode not found");
         }
-        context.Set<BarCode>().Remove(existing);
+        context.BarCodes.Remove(existing);
         await context.SaveChangesAsync();
         
         return new ResultResponse.Success<string>("Barcode deleted");
