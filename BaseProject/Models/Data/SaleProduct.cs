@@ -11,15 +11,15 @@ public class SaleProduct
 
     [Key, Column(Order = 0)] public int SaleOrderId { get; set; }
 
-    [AttMaxLength(25)]
     [Key, Column(Order = 1)]
+    [AttMaxLength(Product.CodeLength)]
     public string ItemCode { get; set; } = string.Empty;
 
     public int AmountRequest { get; set; }
     public int AmountDispatch { get; set; }
     public int? Justify { get; set; }
     public int Adjustment { get; set; }
-    
+
     public long? TimeToExpire { set; get; }
 
     #endregion
@@ -29,6 +29,4 @@ public class SaleProduct
     public virtual Product? ProductInfo { set; get; }
 
     #endregion
-
-   
 }

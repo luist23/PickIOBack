@@ -21,11 +21,11 @@ public class SaleOrder : TimeStampedModel
     public string CustomerCode { get; set; } = string.Empty;
 
     public long? Transference { get; set; }
-    [AttMaxLength(50)] public string? TransferenceUser { get; set; }
+    [AttMaxLength(User.UserIdLength)] public string? TransferenceUser { get; set; }
     public long? Sync { get; set; }
-    [AttMaxLength(50)] public string? SyncUser { get; set; }
+    [AttMaxLength(User.UserIdLength)] public string? SyncUser { get; set; }
 
-    [AttMaxLength(50)] public string? User { set; get; }
+    [AttMaxLength(User.UserIdLength)] public string? UserId { set; get; }
 
     public OrderStatus Status { get; set; }
 

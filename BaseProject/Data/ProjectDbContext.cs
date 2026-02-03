@@ -38,6 +38,18 @@ public sealed class ProjectDbContext : IdentityDbContext<User, Role, string>
             .HasIndex(s => s.Token)
             .IsUnique();
 
+        builder.Entity<PurchaseProduct>()
+            .HasKey(e => new { e.PurchaseOrderId, e.ItemCode });
+
+        builder.Entity<SaleProduct>()
+            .HasKey(e => new { e.SaleOrderId, e.ItemCode });
+
+        builder.Entity<SaleProductSerial>()
+            .HasKey(e => new { e.SaleOrderId, e.ItemCode, e.Serial });
+
+        builder.Entity<Aisle>()
+            .HasKey(e => new { e.WareHouseCode, e.Number });
+
         builder.Entity<User>()
             .HasMany(u => u.Sessions)
             .WithOne(s => s.User)

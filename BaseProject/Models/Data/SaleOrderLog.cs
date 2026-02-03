@@ -12,7 +12,7 @@ public class SaleOrderLog
 
     [Key] public int Id { get; set; }
     public OrderLog TypeLog { get; set; }
-    [MaxLength(50)] [AttRequired] public string UserLog { get; set; } = string.Empty;
+    [MaxLength(User.UserIdLength)] [AttRequired] public string UserId { get; set; } = string.Empty;
     public int Date { get; set; }
     public int Time { get; set; }
     public int? InputA { get; set; }

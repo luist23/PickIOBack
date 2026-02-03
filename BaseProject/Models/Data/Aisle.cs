@@ -10,11 +10,11 @@ public class Aisle
 
     #region Attibutes
 
-    [AttRequired] [AttRange(1, 100)] public int Number { set; get; }
-
     [AttRequired]
     [AttMaxLength(WareHouse.CodeLength)]
     public string WareHouseCode { set; get; } = string.Empty;
+
+    [AttRequired] [AttRange(1, 100)] public int Number { set; get; }
 
     [AttRequired]
     [AttMaxLength(NameLength)]

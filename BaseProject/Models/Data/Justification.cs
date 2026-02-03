@@ -6,14 +6,8 @@ using BaseProject.Models.Extensions;
 namespace BaseProject.Models.Data;
 
 [Table(nameof(Justification))]
-public class Justification :  TimeStampedModel
+public class Justification : TimeStampedModel
 {
-    #region Values
-
-    private string _name = string.Empty;
-
-    #endregion
-
     #region Attibutes
 
     [Key] public int Id { get; set; }
@@ -22,11 +16,9 @@ public class Justification :  TimeStampedModel
     [AttMaxLength(150)]
     public string Name
     {
-        get => _name;
-        set => _name = value.NormalizeText();
-    }
+        get;
+        set => field = value.NormalizeText();
+    } = string.Empty;
 
     #endregion
-
-   
 }

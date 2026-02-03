@@ -6,10 +6,11 @@ namespace BaseProject.Models.Data;
 
 public class User : IdentityUser
 {
-    #region Values
+    #region Constants
 
     public const int NameLength = 255;
     public const int GuidLength = 36;
+    public const int UserIdLength = 255;
 
     #endregion
 
@@ -31,9 +32,14 @@ public class User : IdentityUser
         set => field = value.NormalizeText();
     } = string.Empty;
 
-    public virtual ICollection<UserSession> Sessions { get; set; } = [];
 
     public bool Active { get; set; } = true;
+
+    #endregion
+
+    #region Relations
+
+    public virtual ICollection<UserSession> Sessions { get; set; } = [];
 
     #endregion
 }

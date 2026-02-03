@@ -9,8 +9,12 @@ namespace BaseProject.Models.Data;
 [Table(nameof(WareHouse))]
 public class WareHouse :  TimeStampedModel
 {
+    #region Constants
+
     public const int CodeLength = 5;
     public const int NameLength = 50;
+
+    #endregion
 
     #region Attibutes
 

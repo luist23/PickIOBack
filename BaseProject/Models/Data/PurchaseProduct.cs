@@ -12,7 +12,7 @@ public class PurchaseProduct
     [Key, Column(Order = 0)] public int PurchaseOrderId { get; set; }
 
     [Key, Column(Order = 1)]
-    [AttMaxLength(25)]
+    [AttMaxLength(Product.CodeLength)]
     public string ItemCode { get; set; } = string.Empty;
 
     public int AmountRequest { get; set; }
