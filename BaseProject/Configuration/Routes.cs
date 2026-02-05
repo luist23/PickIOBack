@@ -9,4 +9,5 @@ public static class Routes
 
     public const string AuthApiRoute = $"{Api}/{Auth}";
     public const string BarcodeApiRoute = $"{Api}/{Barcode}";
+    public const string BranchOfficeApiRoute = $"{Api}/branch-office";
 }

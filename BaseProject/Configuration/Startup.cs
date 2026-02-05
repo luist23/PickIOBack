@@ -67,6 +67,7 @@ public class Startup
     {
         services.AddScoped<AuthService>();
         services.AddScoped<BarCodeService>();
+        services.AddScoped<BranchOfficeService>();
     }
 
     #region ConfigureAuthentication
