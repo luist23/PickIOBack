@@ -71,6 +71,7 @@ public class Startup
         services.AddScoped<CustomerService>();
         services.AddScoped<JustificationService>();
         services.AddScoped<ProductService>();
+        services.AddScoped<ProviderService>();
     }
 
     #region ConfigureAuthentication
