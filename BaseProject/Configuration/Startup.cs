@@ -72,6 +72,7 @@ public class Startup
         services.AddScoped<JustificationService>();
         services.AddScoped<ProductService>();
         services.AddScoped<ProviderService>();
+        services.AddScoped<PurchaseOrderService>();
         services.AddScoped<WareHouseService>();
     }
 

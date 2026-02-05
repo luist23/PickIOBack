@@ -15,4 +15,5 @@ public static class Routes
     public const string ProductApiRoute = $"{Api}/product";
     public const string ProviderApiRoute = $"{Api}/provider";
     public const string WareHouseApiRoute = $"{Api}/warehouse";
+    public const string PurchaseOrderApiRoute = $"{Api}/purchase-order";
 }
