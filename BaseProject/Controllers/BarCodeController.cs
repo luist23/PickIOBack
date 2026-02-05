@@ -35,24 +35,32 @@ public class BarCodeController(BarCodeService service) : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(BarCode), 200)]
+    [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Create([FromBody] BarCodeDto barcode)
     {
         return ProjectController.JsonResponse<BarCode>(await service.Create(barcode));
     }
 
     [HttpPut("{code}")]
+    [ProducesResponseType(typeof(BarCode), 200)]
+    [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Update(string code, [FromBody] BarCodeDto barcode)
     {
         return ProjectController.JsonResponse<BarCode>(await service.Update(code, barcode));
     }
 
     [HttpDelete("{code}")]
+    [ProducesResponseType(typeof(BarCode), 200)]
+    [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Delete(string code)
     {
-        return ProjectController.JsonResponse<string>(await service.Delete(code));
+        return ProjectController.JsonResponse<BarCode>(await service.Delete(code));
     }
 
     [HttpDelete("destroy/{code}")]
+    [ProducesResponseType(typeof(string), 200)]
+    [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Destroy(string code)
     {
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
