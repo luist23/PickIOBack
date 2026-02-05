@@ -70,6 +70,7 @@ public class Startup
         services.AddScoped<BranchOfficeService>();
         services.AddScoped<CustomerService>();
         services.AddScoped<JustificationService>();
+        services.AddScoped<ProductService>();
     }
 
     #region ConfigureAuthentication
