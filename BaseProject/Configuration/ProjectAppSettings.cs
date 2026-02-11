@@ -7,6 +7,7 @@ public class ProjectAppSettings
     public ConnectionAppSettings ConnectionStrings { get; set; } = new();
     public string TokenKey { get; set; } = string.Empty;
     public string Environment { get; set; } = string.Empty;
+    public string AllowedHosts { get; set; } = string.Empty;
     public JwtAppSettings Jwt { get; set; } = new();
 }
 

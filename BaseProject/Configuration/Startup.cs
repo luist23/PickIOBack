@@ -54,6 +54,28 @@ public class Startup
             .AddIdentity<User, Role>()
             .AddEntityFrameworkStores<ProjectDbContext>()
             .AddDefaultTokenProviders();
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                if (
+                    string.IsNullOrEmpty(AppSettings.AllowedHosts) ||
+                    AppSettings.AllowedHosts == "*"
+                )
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                }
+                else
+                {
+                    builder.WithOrigins(AppSettings.AllowedHosts)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                }
+            });
+        });
     }
 
     #endregion

@@ -24,7 +24,7 @@ internal static class Program
         }
 
         app.UseHttpsRedirection();
-
+        app.UseCors();
       
         app.UseAuthentication();
         app.UseAuthorization();
