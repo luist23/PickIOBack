@@ -19,9 +19,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "add-admin": {
+    "add-user": {
       "commandName": "Project",
-      "commandLineArgs": "add-admin"
+      "commandLineArgs": "add-user"
     },
     "seeders": {
       "commandName": "Project",

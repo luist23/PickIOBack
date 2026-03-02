@@ -25,12 +25,12 @@ internal static class Program
 
         app.UseHttpsRedirection();
         app.UseCors();
-      
+
         app.UseAuthentication();
         app.UseAuthorization();
         Startup.ConfigureMiddlewares(app: app);
         app.MapControllers();
-        
+
         await app.RunAsync();
     }
 
@@ -38,10 +38,10 @@ internal static class Program
 
     private static async Task<bool> ExecuteCommands(string[] args, WebApplicationBuilder builder)
     {
-        if (args.Contains("add-admin"))
+        if (args.Contains("add-user"))
         {
             var serviceProvider = builder.Build().Services;
-            await UserCommand.RunAddAdminCommandAsync(serviceProvider);
+            await UserCommand.RunAddUserCommandAsync(serviceProvider);
             return false;
         }
 
