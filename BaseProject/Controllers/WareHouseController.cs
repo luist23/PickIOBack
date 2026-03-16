@@ -25,15 +25,15 @@ public class WareHouseController(WareHouseService service) : ControllerBase
     [HttpGet("{code}")]
     [ProducesResponseType(typeof(WareHouseDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
-    public async Task<JsonResult> Get(string code)
+    public Task<JsonResult> Get(string code)
     {
-        var result = await service.GetByCode(code);
+        var result =  service.GetByCode(code);
         if (result is ResultResponse.Success<WareHouse> success)
         {
-            return ProjectController.Respond(success.Result.ToDto());
+            return Task.FromResult(ProjectController.Respond(success.Result.ToDto()));
         }
 
-        return ProjectController.JsonResponse<WareHouse>(result);
+        return Task.FromResult(ProjectController.JsonResponse<WareHouse>(result));
     }
 
     [HttpPost]

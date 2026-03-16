@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using BaseProject.Models.Data;
 
 namespace BaseProject.Models.Contracts.Dtos;
@@ -6,6 +7,7 @@ public class WareHouseDto
 {
     public string Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    public List<Aisle> Aisles { set; get; } = [];
 
     public WareHouseDto()
     {
@@ -15,6 +17,7 @@ public class WareHouseDto
     {
         Code = wareHouse.Code;
         Name = wareHouse.Name;
+        Aisles = wareHouse.Aisles.ToList();
     }
 
     public WareHouse ToEntity()
@@ -22,7 +25,8 @@ public class WareHouseDto
         return new WareHouse
         {
             Code = Code,
-            Name = Name
+            Name = Name,
+            Aisles = new Collection<Aisle>(Aisles)
         };
     }
 }

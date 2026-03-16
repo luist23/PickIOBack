@@ -15,7 +15,7 @@ public class Product : TimeStampedModel
     [AttMaxLength(CodeLength)] [AttRequired] [Key] public string Code { set; get; } = string.Empty;
     [AttMaxLength(50)] [AttRequired] public string Name { set; get; } = string.Empty;
     [AttMaxLength(150)] [AttRequired] public string Detail { set; get; } = string.Empty;
-    [AttMaxLength(20)] public string? Location { set; get; } // whareHouseCode AisleNumber RackNumber TypeRack(A,B) Level
+    [AttMaxLength(20)] public string? Location { set; get; } // whareHouseCode AisleNumber RackNumber TypeRack(A,B) Level 00004-21-23-A/B-99
     [AttRequired] public ProductType Type { set; get; } = ProductType.Default;
 
     #endregion

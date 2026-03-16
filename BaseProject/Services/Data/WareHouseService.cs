@@ -12,7 +12,9 @@ public class WareHouseService(ProjectDbContext context)
 {
     public IOrderedQueryable<WareHouse> GetAll(WareHouseFilter filter)
     {
-        var query = context.WareHouses.AsQueryable();
+        var query = context.WareHouses
+            .Include(e=> e.Aisles)
+            .AsQueryable();
         var search = filter.Search;
         var lastSync = filter.LastSync;
         if (!string.IsNullOrEmpty(search))
@@ -28,9 +30,11 @@ public class WareHouseService(ProjectDbContext context)
         return query.OrderBy(x => x.Code);
     }
     
-    public async Task<ResultResponse> GetByCode(string code)
+    public ResultResponse GetByCode(string code)
     {
-        var wareHouse = await context.WareHouses.FindAsync(code);
+        var wareHouse = context.WareHouses
+            .Include(e=> e.Aisles)
+            .FirstOrDefault(e=> e.Code == code);
         if (wareHouse == null)
         {
             return new ResultResponse.Error("WareHouse not found");
