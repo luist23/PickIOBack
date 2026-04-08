@@ -6,18 +6,19 @@ namespace BaseProject.Models.Mappers;
 
 public static class CustomerMapper
 {
-    public static Expression<Func<Customer, CustomerDto>> Projection => x => new CustomerDto
+    public static Expression<Func<Customer, CustomerDto>> Projection
+        => x => x.ToDto();
+
+    public static CustomerDto ToDto(this Customer item) => new()
     {
-        Code = x.Code,
-        Name = x.Name
+        Code = item.Code,
+        Name = item.Name,
+        Active = item.DeleteAt == null
     };
 
-    public static CustomerDto ToDto(this Customer customer)
+    public static Customer ToEntity(this CustomerDto item) => new()
     {
-        return new CustomerDto
-        {
-            Code = customer.Code,
-            Name = customer.Name
-        };
-    }
+        Code = item.Code,
+        Name = item.Name,
+    };
 }

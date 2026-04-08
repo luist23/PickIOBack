@@ -1,4 +1,4 @@
-﻿using BaseProject.Configuration;
+using BaseProject.Configuration;
 using BaseProject.Models.Contracts;
 using BaseProject.Models.Contracts.Dtos;
 using BaseProject.Models.Contracts.Responses;
@@ -29,35 +29,45 @@ public class BranchOfficeController(BranchOfficeService service) : ControllerBas
     {
         var result = await service.GetByCode(code);
         if (result is ResultResponse.Success<BranchOffice> success)
-        {
             return ProjectController.Respond(success.Result.ToDto());
-        }
 
         return ProjectController.JsonResponse<BranchOffice>(result);
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(BranchOffice), 200)]
+    [ProducesResponseType(typeof(BranchOfficeDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Create([FromBody] BranchOfficeDto dto)
     {
-        return ProjectController.JsonResponse<BranchOffice>(await service.Create(dto));
+        var result = await service.Create(dto);
+        if (result is ResultResponse.Success<BranchOffice> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<BranchOffice>(result);
     }
 
     [HttpPut("{code}")]
-    [ProducesResponseType(typeof(BranchOffice), 200)]
+    [ProducesResponseType(typeof(BranchOfficeDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Update(string code, [FromBody] BranchOfficeDto dto)
     {
-        return ProjectController.JsonResponse<BranchOffice>(await service.Update(code, dto));
+        var result = await service.Update(code, dto);
+        if (result is ResultResponse.Success<BranchOffice> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<BranchOffice>(result);
     }
 
     [HttpDelete("{code}")]
-    [ProducesResponseType(typeof(BranchOffice), 200)]
+    [ProducesResponseType(typeof(BranchOfficeDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Delete(string code)
     {
-        return ProjectController.JsonResponse<BranchOffice>(await service.Delete(code));
+        var result = await service.Delete(code);
+        if (result is ResultResponse.Success<BranchOffice> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<BranchOffice>(result);
     }
 
     [HttpDelete("destroy/{code}")]

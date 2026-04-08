@@ -6,24 +6,25 @@ namespace BaseProject.Models.Mappers;
 
 public static class ProductMapper
 {
-    public static Expression<Func<Product, ProductDto>> Projection => x => new ProductDto
+    public static Expression<Func<Product, ProductDto>> Projection
+        => x => x.ToDto();
+
+    public static ProductDto ToDto(this Product item) => new()
     {
-        Code = x.Code,
-        Name = x.Name,
-        Detail = x.Detail,
-        Location = x.Location,
-        Type = x.Type
+        Code = item.Code,
+        Name = item.Name,
+        Detail = item.Detail,
+        Location = item.Location,
+        Type = item.Type,
+        Active = item.DeleteAt == null
     };
 
-    public static ProductDto ToDto(this Product product)
+    public static Product ToEntity(this ProductDto item) => new()
     {
-        return new ProductDto
-        {
-            Code = product.Code,
-            Name = product.Name,
-            Detail = product.Detail,
-            Location = product.Location,
-            Type = product.Type
-        };
-    }
+        Code = item.Code,
+        Name = item.Name,
+        Detail = item.Detail,
+        Location = item.Location,
+        Type = item.Type
+    };
 }

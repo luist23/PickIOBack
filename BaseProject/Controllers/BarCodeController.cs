@@ -1,4 +1,4 @@
-﻿using BaseProject.Configuration;
+using BaseProject.Configuration;
 using BaseProject.Models.Contracts;
 using BaseProject.Models.Contracts.Dtos;
 using BaseProject.Models.Contracts.Responses;
@@ -35,27 +35,39 @@ public class BarCodeController(BarCodeService service) : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(BarCode), 200)]
+    [ProducesResponseType(typeof(BarCodeDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Create([FromBody] BarCodeDto barcode)
     {
-        return ProjectController.JsonResponse<BarCode>(await service.Create(barcode));
+        var result = await service.Create(barcode);
+        if (result is ResultResponse.Success<BarCode> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<BarCode>(result);
     }
 
     [HttpPut("{code}")]
-    [ProducesResponseType(typeof(BarCode), 200)]
+    [ProducesResponseType(typeof(BarCodeDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Update(string code, [FromBody] BarCodeDto barcode)
     {
-        return ProjectController.JsonResponse<BarCode>(await service.Update(code, barcode));
+        var result = await service.Update(code, barcode);
+        if (result is ResultResponse.Success<BarCode> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<BarCode>(result);
     }
 
     [HttpDelete("{code}")]
-    [ProducesResponseType(typeof(BarCode), 200)]
+    [ProducesResponseType(typeof(BarCodeDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Delete(string code)
     {
-        return ProjectController.JsonResponse<BarCode>(await service.Delete(code));
+        var result = await service.Delete(code);
+        if (result is ResultResponse.Success<BarCode> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<BarCode>(result);
     }
 
     [HttpDelete("destroy/{code}")]

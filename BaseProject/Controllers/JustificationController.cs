@@ -37,27 +37,39 @@ public class JustificationController(JustificationService service) : ControllerB
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Justification), 200)]
+    [ProducesResponseType(typeof(JustificationDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Create([FromBody] JustificationDto dto)
     {
-        return ProjectController.JsonResponse<Justification>(await service.Create(dto));
+        var result = await service.Create(dto);
+        if (result is ResultResponse.Success<Justification> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<Justification>(result);
     }
 
     [HttpPut("{id:int}")]
-    [ProducesResponseType(typeof(Justification), 200)]
+    [ProducesResponseType(typeof(JustificationDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Update(int id, [FromBody] JustificationDto dto)
     {
-        return ProjectController.JsonResponse<Justification>(await service.Update(id, dto));
+        var result = await service.Update(id, dto);
+        if (result is ResultResponse.Success<Justification> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<Justification>(result);
     }
 
     [HttpDelete("{id:int}")]
-    [ProducesResponseType(typeof(Justification), 200)]
+    [ProducesResponseType(typeof(JustificationDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Delete(int id)
     {
-        return ProjectController.JsonResponse<Justification>(await service.Delete(id));
+        var result = await service.Delete(id);
+        if (result is ResultResponse.Success<Justification> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<Justification>(result);
     }
 
     [HttpDelete("destroy/{id:int}")]

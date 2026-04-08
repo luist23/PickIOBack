@@ -37,27 +37,39 @@ public class ProductController(ProductService service) : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Product), 200)]
+    [ProducesResponseType(typeof(ProductDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Create([FromBody] ProductDto dto)
     {
-        return ProjectController.JsonResponse<Product>(await service.Create(dto));
+        var result = await service.Create(dto);
+        if (result is ResultResponse.Success<Product> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<Product>(result);
     }
 
     [HttpPut("{code}")]
-    [ProducesResponseType(typeof(Product), 200)]
+    [ProducesResponseType(typeof(ProductDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Update(string code, [FromBody] ProductDto dto)
     {
-        return ProjectController.JsonResponse<Product>(await service.Update(code, dto));
+        var result = await service.Update(code, dto);
+        if (result is ResultResponse.Success<Product> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<Product>(result);
     }
 
     [HttpDelete("{code}")]
-    [ProducesResponseType(typeof(Product), 200)]
+    [ProducesResponseType(typeof(ProductDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Delete(string code)
     {
-        return ProjectController.JsonResponse<Product>(await service.Delete(code));
+        var result = await service.Delete(code);
+        if (result is ResultResponse.Success<Product> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<Product>(result);
     }
 
     [HttpDelete("destroy/{code}")]

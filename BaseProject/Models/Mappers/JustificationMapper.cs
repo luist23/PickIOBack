@@ -6,18 +6,19 @@ namespace BaseProject.Models.Mappers;
 
 public static class JustificationMapper
 {
-    public static Expression<Func<Justification, JustificationDto>> Projection => x => new JustificationDto
+    public static Expression<Func<Justification, JustificationDto>> Projection
+        => x => x.ToDto();
+
+    public static JustificationDto ToDto(this Justification item) => new()
     {
-        Id = x.Id,
-        Name = x.Name
+        Id = item.Id,
+        Name = item.Name,
+        Active = item.DeleteAt == null
     };
 
-    public static JustificationDto ToDto(this Justification justification)
+    public static Justification ToEntity(this JustificationDto item) => new()
     {
-        return new JustificationDto
-        {
-            Id = justification.Id,
-            Name = justification.Name
-        };
-    }
+        Id = item.Id,
+        Name = item.Name,
+    };
 }

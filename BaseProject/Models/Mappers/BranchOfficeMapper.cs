@@ -6,20 +6,21 @@ namespace BaseProject.Models.Mappers;
 
 public static class BranchOfficeMapper
 {
-    public static Expression<Func<BranchOffice, BranchOfficeDto>> Projection => x => new BranchOfficeDto
+    public static Expression<Func<BranchOffice, BranchOfficeDto>> Projection
+        => x => x.ToDto();
+
+    public static BranchOfficeDto ToDto(this BranchOffice item) => new()
     {
-        Code = x.Code,
-        Name = x.Name,
-        Country = x.Country
+        Code = item.Code,
+        Name = item.Name,
+        Country = item.Country,
+        Active = item.DeleteAt == null
     };
 
-    public static BranchOfficeDto ToDto(this BranchOffice branchOffice)
+    public static BranchOffice ToEntity(this BranchOfficeDto item) => new()
     {
-        return new BranchOfficeDto
-        {
-            Code = branchOffice.Code,
-            Name = branchOffice.Name,
-            Country = branchOffice.Country
-        };
-    }
+        Code = item.Code,
+        Name = item.Name,
+        Country = item.Country
+    };
 }

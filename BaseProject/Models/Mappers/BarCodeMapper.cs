@@ -6,18 +6,19 @@ namespace BaseProject.Models.Mappers;
 
 public static class BarCodeMapper
 {
-    public static Expression<Func<BarCode, BarCodeDto>> Projection => x => new BarCodeDto
-    {
-        Code = x.Code,
-        InternalCode = x.InternalCode
-    };
+    public static Expression<Func<BarCode, BarCodeDto>> Projection
+        => x => x.ToDto();
 
-    public static BarCodeDto ToDto(this BarCode barCode)
+    public static BarCodeDto ToDto(this BarCode item) => new()
     {
-        return new BarCodeDto
-        {
-            Code = barCode.Code,
-            InternalCode = barCode.InternalCode
-        };
-    }
+        Code = item.Code,
+        InternalCode = item.InternalCode,
+        Active = item.DeleteAt == null
+    };
+    
+    public static BarCode ToEntity(this BarCodeDto item) => new()
+    {
+        Code = item.Code,
+        InternalCode = item.InternalCode,
+    };
 }

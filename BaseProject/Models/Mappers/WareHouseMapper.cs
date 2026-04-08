@@ -6,18 +6,19 @@ namespace BaseProject.Models.Mappers;
 
 public static class WareHouseMapper
 {
-    public static Expression<Func<WareHouse, WareHouseDto>> Projection => x => new WareHouseDto
+    public static Expression<Func<WareHouse, WareHouseDto>> Projection
+        => x => x.ToDto();
+
+    public static WareHouseDto ToDto(this WareHouse item) => new()
     {
-        Code = x.Code,
-        Name = x.Name
+        Code = item.Code,
+        Name = item.Name,
+        Active = item.DeleteAt == null
     };
 
-    public static WareHouseDto ToDto(this WareHouse wareHouse)
+    public static WareHouse ToEntity(this WareHouseDto item) => new()
     {
-        return new WareHouseDto
-        {
-            Code = wareHouse.Code,
-            Name = wareHouse.Name
-        };
-    }
+        Code = item.Code,
+        Name = item.Name,
+    };
 }

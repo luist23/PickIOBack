@@ -37,27 +37,39 @@ public class SaleOrderController(SaleOrderService service) : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(SaleOrder), 200)]
+    [ProducesResponseType(typeof(SaleOrderDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Create([FromBody] SaleOrderDto dto)
     {
-        return ProjectController.JsonResponse<SaleOrder>(await service.Create(dto));
+        var result = await service.Create(dto);
+        if (result is ResultResponse.Success<SaleOrder> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<SaleOrder>(result);
     }
 
     [HttpPut("{id:int}")]
-    [ProducesResponseType(typeof(SaleOrder), 200)]
+    [ProducesResponseType(typeof(SaleOrderDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Update(int id, [FromBody] SaleOrderDto dto)
     {
-        return ProjectController.JsonResponse<SaleOrder>(await service.Update(id, dto));
+        var result = await service.Update(id, dto);
+        if (result is ResultResponse.Success<SaleOrder> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<SaleOrder>(result);
     }
 
     [HttpDelete("{id:int}")]
-    [ProducesResponseType(typeof(SaleOrder), 200)]
+    [ProducesResponseType(typeof(SaleOrderDto), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Delete(int id)
     {
-        return ProjectController.JsonResponse<SaleOrder>(await service.Delete(id));
+        var result = await service.Delete(id);
+        if (result is ResultResponse.Success<SaleOrder> success)
+            return ProjectController.Respond(success.Result.ToDto());
+
+        return ProjectController.JsonResponse<SaleOrder>(result);
     }
 
     [HttpDelete("destroy/{id:int}")]

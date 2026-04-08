@@ -7,6 +7,7 @@ public class WareHouseDto
 {
     public string Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    public bool Active { get; set; }
     public List<Aisle> Aisles { set; get; } = [];
 
     public WareHouseDto()

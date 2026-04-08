@@ -15,6 +15,7 @@ public class PurchaseOrderDto
     public string? SyncUser { get; set; }
     public OrderStatus Status { get; set; }
     public string? UserId { get; set; }
+    public bool Active { get; set; }
 
     public List<PurchaseProductDto> Products { get; set; } = [];
 
