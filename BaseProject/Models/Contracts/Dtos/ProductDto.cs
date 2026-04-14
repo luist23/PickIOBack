@@ -8,6 +8,5 @@ public class ProductDto
     public string Name { get; set; } = string.Empty;
     public string Detail { get; set; } = string.Empty;
     public string? Location { get; set; }
-    public ProductType Type { get; set; }
     public bool Active { get; set; }
 }

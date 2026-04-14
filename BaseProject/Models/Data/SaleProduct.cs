@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BaseProject.Models.Attributes;
+using BaseProject.Models.Enums;
 
 namespace BaseProject.Models.Data;
 
@@ -21,6 +22,8 @@ public class SaleProduct
     public int Adjustment { get; set; }
 
     public long? TimeToExpire { set; get; }
+    
+    [AttRequired] public ProductType Type { set; get; } = ProductType.Default;
 
     #endregion
 

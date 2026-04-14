@@ -15,7 +15,6 @@ public static class ProductMapper
         Name = item.Name,
         Detail = item.Detail,
         Location = item.Location,
-        Type = item.Type,
         Active = item.DeleteAt == null
     };
 
@@ -24,7 +23,6 @@ public static class ProductMapper
         Code = item.Code,
         Name = item.Name,
         Detail = item.Detail,
-        Location = item.Location,
-        Type = item.Type
+        Location = item.Location
     };
 }
