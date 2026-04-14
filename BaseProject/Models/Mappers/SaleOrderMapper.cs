@@ -16,6 +16,7 @@ public static class SaleOrderMapper
         SyncUser = x.SyncUser,
         UserId = x.UserId,
         Status = x.Status,
+        Active = x.DeleteAt == null,
         Products = x.Products.Select(p => new SaleProductDto
         {
             ItemCode = p.ItemCode,

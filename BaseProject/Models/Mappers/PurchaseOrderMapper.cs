@@ -17,6 +17,7 @@ public static class PurchaseOrderMapper
         SyncUser = x.SyncUser,
         Status = x.Status,
         UserId = x.UserId,
+        Active = x.DeleteAt == null,
         Products = x.Products.Select(p => new PurchaseProductDto
         {
             ItemCode = p.ItemCode,
