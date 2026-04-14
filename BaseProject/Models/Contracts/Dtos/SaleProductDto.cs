@@ -1,4 +1,5 @@
 using BaseProject.Models.Data;
+using BaseProject.Models.Enums;
 
 namespace BaseProject.Models.Contracts.Dtos;
 
@@ -10,6 +11,7 @@ public class SaleProductDto
     public int? Justify { get; set; }
     public int Adjustment { get; set; }
     public long? TimeToExpire { get; set; }
+    public ProductType Type { set; get; }
 
     public SaleProductDto()
     {
@@ -23,6 +25,7 @@ public class SaleProductDto
         Justify = product.Justify;
         Adjustment = product.Adjustment;
         TimeToExpire = product.TimeToExpire;
+        Type = product.Type;
     }
 
     public SaleProduct ToEntity()
@@ -34,7 +37,8 @@ public class SaleProductDto
             AmountDispatch = AmountDispatch,
             Justify = Justify,
             Adjustment = Adjustment,
-            TimeToExpire = TimeToExpire
+            TimeToExpire = TimeToExpire,
+            Type = Type
         };
     }
 }

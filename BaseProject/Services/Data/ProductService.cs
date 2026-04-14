@@ -65,7 +65,6 @@ public class ProductService(ProjectDbContext context)
         existing.Name = dto.Name;
         existing.Detail = dto.Detail;
         existing.Location = dto.Location;
-        existing.Type = dto.Type;
         
         context.Products.Update(existing);
         await context.SaveChangesAsync();

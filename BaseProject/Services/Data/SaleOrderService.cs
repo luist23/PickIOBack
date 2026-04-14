@@ -130,7 +130,8 @@ public class SaleOrderService(ProjectDbContext context)
                     AmountDispatch = productDto.AmountDispatch,
                     Justify = productDto.Justify,
                     Adjustment = productDto.Adjustment,
-                    TimeToExpire = productDto.TimeToExpire
+                    TimeToExpire = productDto.TimeToExpire,
+                    Type = productDto.Type
                 });
             }
             else
@@ -141,6 +142,7 @@ public class SaleOrderService(ProjectDbContext context)
                 existingProduct.Justify = productDto.Justify;
                 existingProduct.Adjustment = productDto.Adjustment;
                 existingProduct.TimeToExpire = productDto.TimeToExpire;
+                existingProduct.Type = productDto.Type;
             }
         }
     }
