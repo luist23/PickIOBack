@@ -7,24 +7,50 @@ namespace BaseProject.Models.Mappers;
 
 public static class WareHouseMapper
 {
-    public static Expression<Func<WareHouse, WareHouseDto>> Projection
-        => x => x.ToDto();
+    public static Expression<Func<WareHouse, WareHouseDto>> Projection =>
+        x => new WareHouseDto
+        {
+            Code = x.Code,
+            Name = x.Name,
+            Active = x.DeletedAt == null, // Recomiendo cambiar a DeletedAt
+            Aisles = x.Aisles
+                .AsQueryable() // ← Esta es la clave
+                .Select(AisleMapper.ToDtoExpression)
+                .ToList()
+        };
 
-    public static WareHouseDto ToDto(this WareHouse item) => new()
+    // Mapeo Entidad → DTO
+    public static WareHouseDto ToDto(this WareHouse entity) => new()
     {
-        Code = item.Code,
-        Name = item.Name,
-        Active = item.DeleteAt == null,
-        Aisles = item.Aisles
-            .Select(x=> x.ToDto())
-            .ToList(),
+        Code = entity.Code,
+        Name = entity.Name,
+        Active = entity.DeletedAt == null,
+        Aisles = entity.Aisles?
+            .Select(a => a.ToDto())
+            .ToList() ?? new List<AisleDto>()
     };
 
-    public static WareHouse ToEntity(this WareHouseDto item) => new()
+    // Mapeo DTO → Entidad (para crear)
+    public static WareHouse ToEntity(this WareHouseDto dto)
     {
-        Code = item.Code,
-        Name = item.Name,
-        Aisles = (Collection<Aisle>)item.Aisles
-            .Select(e => e.ToEntity(item.Code)),
-    };
+        var warehouse = new WareHouse
+        {
+            Code = dto.Code,
+            Name = dto.Name,
+            // DeletedAt = null;  // normalmente se deja por defecto
+        };
+
+        if (dto.Aisles.Count != 0)
+        {
+            warehouse.Aisles = dto.Aisles
+                .Select(a => a.ToEntity(warehouse)) // Pasamos la referencia del padre
+                .ToList(); // List<Aisle> es más seguro
+        }
+        else
+        {
+            warehouse.Aisles = new List<Aisle>();
+        }
+
+        return warehouse;
+    }
 }

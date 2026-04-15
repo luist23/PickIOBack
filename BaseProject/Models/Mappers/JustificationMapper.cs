@@ -13,7 +13,7 @@ public static class JustificationMapper
     {
         Id = item.Id,
         Name = item.Name,
-        Active = item.DeleteAt == null
+        Active = item.DeletedAt == null
     };
 
     public static Justification ToEntity(this JustificationDto item) => new()

@@ -31,7 +31,7 @@ public class WareHouse :  TimeStampedModel
 
     #region Relations
 
-    public virtual Collection<Aisle> Aisles { set; get; } = [];
+    public virtual ICollection<Aisle> Aisles { set; get; } = [];
 
     #endregion
     

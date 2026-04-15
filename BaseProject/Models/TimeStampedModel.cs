@@ -4,24 +4,24 @@ namespace BaseProject.Models;
 
 public abstract class TimeStampedModel
 {
-    public long UpdateAt { get; set; }
-    public long CreateAt { get; set; }
-    public long? DeleteAt { get; set; }
+    public long UpdatedAt { get; set; }
+    public long CreatedAt { get; set; }
+    public long? DeletedAt { get; set; }
 
     public void Update()
     {
-        UpdateAt = TimeUtil.GetTimeLong();
+        UpdatedAt = TimeUtil.GetTimeLong();
     }
 
     public void Delete(bool delete = true)
     {
         if (delete)
         {
-            DeleteAt = TimeUtil.GetTimeLong();
+            DeletedAt = TimeUtil.GetTimeLong();
         }
         else
         {
-            DeleteAt = null;
+            DeletedAt = null;
         }
     }
 }

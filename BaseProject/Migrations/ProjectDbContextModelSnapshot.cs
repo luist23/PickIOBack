@@ -45,10 +45,10 @@ namespace BaseProject.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("CreateAt")
+                    b.Property<long>("CreatedAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("DeleteAt")
+                    b.Property<long?>("DeletedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("InternalCode")
@@ -56,7 +56,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("UpdateAt")
+                    b.Property<long>("UpdatedAt")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Code");
@@ -75,10 +75,10 @@ namespace BaseProject.Migrations
                         .HasMaxLength(2)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("CreateAt")
+                    b.Property<long>("CreatedAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("DeleteAt")
+                    b.Property<long?>("DeletedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -86,7 +86,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("UpdateAt")
+                    b.Property<long>("UpdatedAt")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Code");
@@ -100,10 +100,10 @@ namespace BaseProject.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("CreateAt")
+                    b.Property<long>("CreatedAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("DeleteAt")
+                    b.Property<long?>("DeletedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -111,7 +111,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("UpdateAt")
+                    b.Property<long>("UpdatedAt")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Code");
@@ -125,10 +125,10 @@ namespace BaseProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("CreateAt")
+                    b.Property<long>("CreatedAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("DeleteAt")
+                    b.Property<long?>("DeletedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -136,7 +136,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("UpdateAt")
+                    b.Property<long>("UpdatedAt")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -150,10 +150,10 @@ namespace BaseProject.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("CreateAt")
+                    b.Property<long>("CreatedAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("DeleteAt")
+                    b.Property<long?>("DeletedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Detail")
@@ -170,7 +170,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("UpdateAt")
+                    b.Property<long>("UpdatedAt")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Code");
@@ -184,10 +184,10 @@ namespace BaseProject.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("CreateAt")
+                    b.Property<long>("CreatedAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("DeleteAt")
+                    b.Property<long?>("DeletedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -195,7 +195,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("UpdateAt")
+                    b.Property<long>("UpdatedAt")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Code");
@@ -208,10 +208,10 @@ namespace BaseProject.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("CreateAt")
+                    b.Property<long>("CreatedAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("DeleteAt")
+                    b.Property<long?>("DeletedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Invoice")
@@ -240,7 +240,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("UpdateAt")
+                    b.Property<long>("UpdatedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
@@ -320,7 +320,7 @@ namespace BaseProject.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("CreateAt")
+                    b.Property<long>("CreatedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CustomerCode")
@@ -328,7 +328,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("TEXT");
 
-                    b.Property<long?>("DeleteAt")
+                    b.Property<long?>("DeletedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
@@ -348,7 +348,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("UpdateAt")
+                    b.Property<long>("UpdatedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
@@ -602,10 +602,10 @@ namespace BaseProject.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("CreateAt")
+                    b.Property<long>("CreatedAt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("DeleteAt")
+                    b.Property<long?>("DeletedAt")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -613,7 +613,7 @@ namespace BaseProject.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("UpdateAt")
+                    b.Property<long>("UpdatedAt")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Code");

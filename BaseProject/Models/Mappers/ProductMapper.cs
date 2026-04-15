@@ -15,7 +15,7 @@ public static class ProductMapper
         Name = item.Name,
         Detail = item.Detail,
         Location = item.Location,
-        Active = item.DeleteAt == null
+        Active = item.DeletedAt == null
     };
 
     public static Product ToEntity(this ProductDto item) => new()

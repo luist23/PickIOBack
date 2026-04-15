@@ -23,7 +23,7 @@ public class ProductService(ProjectDbContext context)
         
         if (lastSync.HasValue)
         {
-             query = query.Where(x => x.UpdateAt > lastSync.Value);
+             query = query.Where(x => x.UpdatedAt > lastSync.Value);
         }
 
         return query.OrderBy(x => x.Code);
@@ -79,7 +79,7 @@ public class ProductService(ProjectDbContext context)
         {
             return new ResultResponse.Error("Product not found");
         }
-        existing.Delete(existing.DeleteAt == null);
+        existing.Delete(existing.DeletedAt == null);
         await context.SaveChangesAsync();
         
         return new ResultResponse.Success<Product>(existing);

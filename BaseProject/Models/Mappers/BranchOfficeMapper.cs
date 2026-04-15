@@ -14,7 +14,7 @@ public static class BranchOfficeMapper
         Code = item.Code,
         Name = item.Name,
         Country = item.Country,
-        Active = item.DeleteAt == null
+        Active = item.DeletedAt == null
     };
 
     public static BranchOffice ToEntity(this BranchOfficeDto item) => new()

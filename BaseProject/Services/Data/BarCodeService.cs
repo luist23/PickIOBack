@@ -20,7 +20,7 @@ public class BarCodeService(ProjectDbContext context)
             query = query.Where(x => x.Code.Contains(search) || x.InternalCode.Contains(search));
 
         if (lastSync.HasValue)
-            query = query.Where(x => x.UpdateAt > lastSync.Value);
+            query = query.Where(x => x.UpdatedAt > lastSync.Value);
 
         return query.OrderBy(x => x.Code);
     }
@@ -64,7 +64,7 @@ public class BarCodeService(ProjectDbContext context)
         var existing = await context.BarCodes.FindAsync(code);
         if (existing == null) return new ResultResponse.Error("Barcode not found");
 
-        existing.Delete(existing.DeleteAt == null);
+        existing.Delete(existing.DeletedAt == null);
         await context.SaveChangesAsync();
 
         return new ResultResponse.Success<BarCode>(existing);

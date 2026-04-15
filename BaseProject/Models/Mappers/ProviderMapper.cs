@@ -13,7 +13,7 @@ public static class ProviderMapper
     {
         Code = item.Code,
         Name = item.Name,
-        Active = item.DeleteAt == null
+        Active = item.DeletedAt == null
     };
 
     public static Provider ToEntity(this ProviderDto item) => new()

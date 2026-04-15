@@ -13,7 +13,7 @@ public static class CustomerMapper
     {
         Code = item.Code,
         Name = item.Name,
-        Active = item.DeleteAt == null
+        Active = item.DeletedAt == null
     };
 
     public static Customer ToEntity(this CustomerDto item) => new()

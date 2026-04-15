@@ -60,9 +60,9 @@ namespace BaseProject.Migrations
                 {
                     Code = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
                     InternalCode = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    UpdateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeleteAt = table.Column<long>(type: "INTEGER", nullable: true)
+                    UpdatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeletedAt = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,9 +76,9 @@ namespace BaseProject.Migrations
                     Code = table.Column<string>(type: "TEXT", maxLength: 5, nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Country = table.Column<string>(type: "TEXT", maxLength: 2, nullable: false),
-                    UpdateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeleteAt = table.Column<long>(type: "INTEGER", nullable: true)
+                    UpdatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeletedAt = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,9 +91,9 @@ namespace BaseProject.Migrations
                 {
                     Code = table.Column<string>(type: "TEXT", maxLength: 16, nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    UpdateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeleteAt = table.Column<long>(type: "INTEGER", nullable: true)
+                    UpdatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeletedAt = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -107,9 +107,9 @@ namespace BaseProject.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    UpdateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeleteAt = table.Column<long>(type: "INTEGER", nullable: true)
+                    UpdatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeletedAt = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -124,10 +124,9 @@ namespace BaseProject.Migrations
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Detail = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
                     Location = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true),
-                    Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    UpdateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeleteAt = table.Column<long>(type: "INTEGER", nullable: true)
+                    UpdatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeletedAt = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -140,9 +139,9 @@ namespace BaseProject.Migrations
                 {
                     Code = table.Column<string>(type: "TEXT", maxLength: 16, nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    UpdateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeleteAt = table.Column<long>(type: "INTEGER", nullable: true)
+                    UpdatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeletedAt = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -162,9 +161,9 @@ namespace BaseProject.Migrations
                     SyncUser = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    UpdateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeleteAt = table.Column<long>(type: "INTEGER", nullable: true)
+                    UpdatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeletedAt = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -196,9 +195,9 @@ namespace BaseProject.Migrations
                 {
                     Code = table.Column<string>(type: "TEXT", maxLength: 5, nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    UpdateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeleteAt = table.Column<long>(type: "INTEGER", nullable: true)
+                    UpdatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeletedAt = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -367,9 +366,9 @@ namespace BaseProject.Migrations
                     SyncUser = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
                     UserId = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    UpdateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    CreateAt = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeleteAt = table.Column<long>(type: "INTEGER", nullable: true)
+                    UpdatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeletedAt = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -446,6 +445,7 @@ namespace BaseProject.Migrations
                     Justify = table.Column<int>(type: "INTEGER", nullable: true),
                     Adjustment = table.Column<int>(type: "INTEGER", nullable: false),
                     TimeToExpire = table.Column<long>(type: "INTEGER", nullable: true),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductInfoCode = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>

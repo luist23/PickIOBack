@@ -83,10 +83,10 @@ public sealed class ProjectDbContext : IdentityDbContext<User, Role, string>
 
             if (entry.State == EntityState.Added)
             {
-                entity.CreateAt = now;
+                entity.CreatedAt = now;
             }
 
-            entity.UpdateAt = now;
+            entity.UpdatedAt = now;
         }
     }
 }

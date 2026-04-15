@@ -18,7 +18,7 @@ public class SaleOrderService(ProjectDbContext context)
         
         if (lastSync.HasValue)
         {
-             query = query.Where(x => x.UpdateAt > lastSync.Value);
+             query = query.Where(x => x.UpdatedAt > lastSync.Value);
         }
         
         if (status.HasValue)
@@ -212,7 +212,7 @@ public class SaleOrderService(ProjectDbContext context)
         {
             return new ResultResponse.Error("SaleOrder not found");
         }
-        existing.Delete(existing.DeleteAt == null);
+        existing.Delete(existing.DeletedAt == null);
         await context.SaveChangesAsync();
         
         return new ResultResponse.Success<SaleOrder>(existing);

@@ -13,7 +13,7 @@ public static class BarCodeMapper
     {
         Code = item.Code,
         InternalCode = item.InternalCode,
-        Active = item.DeleteAt == null
+        Active = item.DeletedAt == null
     };
     
     public static BarCode ToEntity(this BarCodeDto item) => new()
