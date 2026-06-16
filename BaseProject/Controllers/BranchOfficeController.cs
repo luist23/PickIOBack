@@ -77,4 +77,12 @@ public class BranchOfficeController(BranchOfficeService service) : ControllerBas
     {
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
+
+    [HttpGet("count")]
+    [ProducesResponseType(typeof(BranchOfficeCountResponse), 200)]
+    public async Task<JsonResult> Count([FromQuery] BranchOfficeFilter request)
+    {
+        var total = await service.CountAsync(request);
+        return ProjectController.Respond(new BranchOfficeCountResponse { Total = total });
+    }
 }

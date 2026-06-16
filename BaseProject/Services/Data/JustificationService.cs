@@ -11,6 +11,11 @@ namespace BaseProject.Services.Data;
 
 public class JustificationService(ProjectDbContext context)
 {
+    public async Task<int> CountAsync(JustificationFilter filter)
+    {
+        return await GetAll(filter).CountAsync();
+    }
+
     public IOrderedQueryable<Justification> GetAll(JustificationFilter filter)
     {
         var query = context.Justifications.AsQueryable();

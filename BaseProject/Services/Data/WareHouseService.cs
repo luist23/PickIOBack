@@ -10,6 +10,11 @@ namespace BaseProject.Services.Data;
 
 public class WareHouseService(ProjectDbContext context)
 {
+    public async Task<int> CountAsync(WareHouseFilter filter)
+    {
+        return await GetAll(filter).CountAsync();
+    }
+
     public IOrderedQueryable<WareHouse> GetAll(WareHouseFilter filter)
     {
         IQueryable<WareHouse> query = context.WareHouses

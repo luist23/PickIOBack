@@ -1,4 +1,4 @@
-﻿using BaseProject.Data;
+using BaseProject.Data;
 using BaseProject.Models.Contracts;
 using BaseProject.Models.Contracts.Dtos;
 using BaseProject.Models.Contracts.Responses;
@@ -11,6 +11,11 @@ namespace BaseProject.Services.Data;
 
 public class BranchOfficeService(ProjectDbContext context)
 {
+    public async Task<int> CountAsync(BranchOfficeFilter filter)
+    {
+        return await GetAll(filter).CountAsync();
+    }
+
     public IOrderedQueryable<BranchOffice> GetAll(BranchOfficeFilter filter)
     {
         var query = context.BranchOffices.AsQueryable();

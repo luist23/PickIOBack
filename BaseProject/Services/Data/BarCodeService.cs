@@ -1,4 +1,4 @@
-﻿using BaseProject.Data;
+using BaseProject.Data;
 using BaseProject.Models.Contracts;
 using BaseProject.Models.Contracts.Dtos;
 using BaseProject.Models.Contracts.Responses;
@@ -10,6 +10,11 @@ namespace BaseProject.Services.Data;
 
 public class BarCodeService(ProjectDbContext context)
 {
+    public async Task<int> CountAsync(BarCodeFilter filter)
+    {
+        return await GetAll(filter).CountAsync();
+    }
+
     public IOrderedQueryable<BarCode> GetAll(BarCodeFilter filter)
     {
         var query = context.BarCodes.AsQueryable();

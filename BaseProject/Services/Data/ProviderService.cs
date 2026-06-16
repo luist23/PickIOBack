@@ -11,6 +11,11 @@ namespace BaseProject.Services.Data;
 
 public class ProviderService(ProjectDbContext context)
 {
+    public async Task<int> CountAsync(ProviderFilter filter)
+    {
+        return await GetAll(filter).CountAsync();
+    }
+
     public IOrderedQueryable<Provider> GetAll(ProviderFilter filter)
     {
         var query = context.Providers.AsQueryable();

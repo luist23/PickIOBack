@@ -27,7 +27,7 @@ public class WareHouseController(WareHouseService service) : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public Task<JsonResult> Get(string code)
     {
-        var result =  service.GetByCode(code);
+        var result = service.GetByCode(code);
         if (result is ResultResponse.Success<WareHouse> success)
         {
             return Task.FromResult(ProjectController.Respond(success.Result.ToDto()));
@@ -78,5 +78,13 @@ public class WareHouseController(WareHouseService service) : ControllerBase
     public async Task<JsonResult> Destroy(string code)
     {
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
+    }
+
+    [HttpGet("count")]
+    [ProducesResponseType(typeof(WareHouseCountResponse), 200)]
+    public async Task<JsonResult> Count([FromQuery] WareHouseFilter request)
+    {
+        var total = await service.CountAsync(request);
+        return ProjectController.Respond(new WareHouseCountResponse { Total = total });
     }
 }

@@ -10,6 +10,11 @@ namespace BaseProject.Services.Data;
 
 public class SaleOrderService(ProjectDbContext context)
 {
+    public async Task<int> CountAsync(SaleOrderFilter filter)
+    {
+        return await GetAll(filter).CountAsync();
+    }
+
     public IOrderedQueryable<SaleOrder> GetAll(SaleOrderFilter filter)
     {
         var query = context.SaleOrders.AsQueryable();

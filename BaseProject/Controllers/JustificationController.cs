@@ -79,4 +79,12 @@ public class JustificationController(JustificationService service) : ControllerB
     {
         return ProjectController.JsonResponse<string>(await service.Destroy(id));
     }
+
+    [HttpGet("count")]
+    [ProducesResponseType(typeof(JustificationCountResponse), 200)]
+    public async Task<JsonResult> Count([FromQuery] JustificationFilter request)
+    {
+        var total = await service.CountAsync(request);
+        return ProjectController.Respond(new JustificationCountResponse { Total = total });
+    }
 }

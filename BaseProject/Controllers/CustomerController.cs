@@ -79,4 +79,12 @@ public class CustomerController(CustomerService service) : ControllerBase
     {
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
+
+    [HttpGet("count")]
+    [ProducesResponseType(typeof(CustomerCountResponse), 200)]
+    public async Task<JsonResult> Count([FromQuery] CustomerFilter request)
+    {
+        var total = await service.CountAsync(request);
+        return ProjectController.Respond(new CustomerCountResponse { Total = total });
+    }
 }

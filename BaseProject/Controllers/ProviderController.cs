@@ -79,4 +79,12 @@ public class ProviderController(ProviderService service) : ControllerBase
     {
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
+
+    [HttpGet("count")]
+    [ProducesResponseType(typeof(ProviderCountResponse), 200)]
+    public async Task<JsonResult> Count([FromQuery] ProviderFilter request)
+    {
+        var total = await service.CountAsync(request);
+        return ProjectController.Respond(new ProviderCountResponse { Total = total });
+    }
 }

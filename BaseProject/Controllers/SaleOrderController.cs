@@ -79,4 +79,12 @@ public class SaleOrderController(SaleOrderService service) : ControllerBase
     {
         return ProjectController.JsonResponse<string>(await service.Destroy(id));
     }
+
+    [HttpGet("count")]
+    [ProducesResponseType(typeof(SaleOrderCountResponse), 200)]
+    public async Task<JsonResult> Count([FromQuery] SaleOrderFilter request)
+    {
+        var total = await service.CountAsync(request);
+        return ProjectController.Respond(new SaleOrderCountResponse { Total = total });
+    }
 }
