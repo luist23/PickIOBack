@@ -81,7 +81,7 @@ public class ProviderController(ProviderService service) : ControllerBase
     }
 
     [HttpGet("count")]
-    [ProducesResponseType(typeof(ProviderCountResponse), 200)]
+    [ProducesResponseType(typeof(ApiResponse<ProviderCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] ProviderFilter request)
     {
         var total = await service.CountAsync(request);

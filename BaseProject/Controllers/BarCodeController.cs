@@ -79,7 +79,7 @@ public class BarCodeController(BarCodeService service) : ControllerBase
     }
 
     [HttpGet("count")]
-    [ProducesResponseType(typeof(BarCodeCountResponse), 200)]
+    [ProducesResponseType(typeof(ApiResponse<BarCodeCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] BarCodeFilter request)
     {
         var total = await service.CountAsync(request);

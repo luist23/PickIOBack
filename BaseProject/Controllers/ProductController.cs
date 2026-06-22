@@ -81,7 +81,7 @@ public class ProductController(ProductService service) : ControllerBase
     }
 
     [HttpGet("count")]
-    [ProducesResponseType(typeof(ProductCountResponse), 200)]
+    [ProducesResponseType(typeof(ApiResponse<ProductCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] ProductFilter request)
     {
         var total = await service.CountAsync(request);

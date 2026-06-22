@@ -81,7 +81,7 @@ public class JustificationController(JustificationService service) : ControllerB
     }
 
     [HttpGet("count")]
-    [ProducesResponseType(typeof(JustificationCountResponse), 200)]
+    [ProducesResponseType(typeof(ApiResponse<JustificationCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] JustificationFilter request)
     {
         var total = await service.CountAsync(request);

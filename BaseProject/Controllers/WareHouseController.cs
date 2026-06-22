@@ -81,7 +81,7 @@ public class WareHouseController(WareHouseService service) : ControllerBase
     }
 
     [HttpGet("count")]
-    [ProducesResponseType(typeof(WareHouseCountResponse), 200)]
+    [ProducesResponseType(typeof(ApiResponse<WareHouseCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] WareHouseFilter request)
     {
         var total = await service.CountAsync(request);
