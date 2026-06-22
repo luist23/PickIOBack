@@ -13,14 +13,18 @@ namespace BaseProject.Controllers;
 [Route(Routes.JustificationApiRoute)]
 public class JustificationController(JustificationService service) : ControllerBase
 {
+    #region Get All
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<JustificationDto>), 200)]
+    [ProducesResponseType(typeof(ApiPaginationResponse<JustificationDto>), 200)]
     public JsonResult Get([FromQuery] JustificationFilter request)
     {
         var query = service.GetAll(request)
             .Select(JustificationMapper.Projection);
         return ProjectController.RespondPagination(query, request);
     }
+
+    #endregion
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(JustificationDto), 200)]
@@ -80,6 +84,8 @@ public class JustificationController(JustificationService service) : ControllerB
         return ProjectController.JsonResponse<string>(await service.Destroy(id));
     }
 
+    #region Count
+
     [HttpGet("count")]
     [ProducesResponseType(typeof(ApiResponse<JustificationCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] JustificationFilter request)
@@ -87,4 +93,6 @@ public class JustificationController(JustificationService service) : ControllerB
         var total = await service.CountAsync(request);
         return ProjectController.Respond(new JustificationCountResponse { Total = total });
     }
+
+    #endregion
 }

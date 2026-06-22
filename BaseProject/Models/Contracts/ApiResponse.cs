@@ -29,7 +29,7 @@ public class ApiFailure
     }
 }
 
-public class ApiPaginationResponse<T>(IQueryable value, Metadata meta) : ApiResponse<IQueryable>(value)
+public class ApiPaginationResponse<T>(IQueryable<T> value, Metadata meta) : ApiResponse<IQueryable<T>>(value)
     where T : class
 {
     public Metadata Meta { get; } = meta;

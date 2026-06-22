@@ -13,14 +13,18 @@ namespace BaseProject.Controllers;
 [Route(Routes.PurchaseOrderApiRoute)]
 public class PurchaseOrderController(PurchaseOrderService service) : ControllerBase
 {
+    #region Get All
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<PurchaseOrderDto>), 200)]
+    [ProducesResponseType(typeof(ApiPaginationResponse<PurchaseOrderDto>), 200)]
     public JsonResult Get([FromQuery] PurchaseOrderFilter request)
     {
         var query = service.GetAll(request)
             .Select(PurchaseOrderMapper.Projection);
         return ProjectController.RespondPagination(query, request);
     }
+
+    #endregion
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(PurchaseOrderDto), 200)]
@@ -80,6 +84,8 @@ public class PurchaseOrderController(PurchaseOrderService service) : ControllerB
         return ProjectController.JsonResponse<string>(await service.Destroy(id));
     }
 
+    #region Count
+
     [HttpGet("count")]
     [ProducesResponseType(typeof(ApiResponse<PurchaseOrderCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] PurchaseOrderFilter request)
@@ -87,4 +93,6 @@ public class PurchaseOrderController(PurchaseOrderService service) : ControllerB
         var total = await service.CountAsync(request);
         return ProjectController.Respond(new PurchaseOrderCountResponse { Total = total });
     }
+
+    #endregion
 }

@@ -13,14 +13,18 @@ namespace BaseProject.Controllers;
 [Route(Routes.CustomerApiRoute)]
 public class CustomerController(CustomerService service) : ControllerBase
 {
+    #region Get All
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<CustomerDto>), 200)]
+    [ProducesResponseType(typeof(ApiPaginationResponse<CustomerDto>), 200)]
     public JsonResult Get([FromQuery] CustomerFilter request)
     {
         var query = service.GetAll(request)
             .Select(CustomerMapper.Projection);
         return ProjectController.RespondPagination(query, request);
     }
+
+    #endregion
 
     [HttpGet("{code}")]
     [ProducesResponseType(typeof(CustomerDto), 200)]
@@ -80,6 +84,8 @@ public class CustomerController(CustomerService service) : ControllerBase
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
 
+    #region Count
+
     [HttpGet("count")]
     [ProducesResponseType(typeof(ApiResponse<CustomerCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] CustomerFilter request)
@@ -87,4 +93,6 @@ public class CustomerController(CustomerService service) : ControllerBase
         var total = await service.CountAsync(request);
         return ProjectController.Respond(new CustomerCountResponse { Total = total });
     }
+
+    #endregion
 }

@@ -13,14 +13,18 @@ namespace BaseProject.Controllers;
 [Route(Routes.WareHouseApiRoute)]
 public class WareHouseController(WareHouseService service) : ControllerBase
 {
+    #region Get All
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<WareHouseDto>), 200)]
+    [ProducesResponseType(typeof(ApiPaginationResponse<WareHouseDto>), 200)]
     public JsonResult Get([FromQuery] WareHouseFilter request)
     {
         var query = service.GetAll(request)
             .Select(WareHouseMapper.Projection);
         return ProjectController.RespondPagination(query, request);
     }
+
+    #endregion
 
     [HttpGet("{code}")]
     [ProducesResponseType(typeof(WareHouseDto), 200)]
@@ -80,6 +84,8 @@ public class WareHouseController(WareHouseService service) : ControllerBase
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
 
+    #region Count
+
     [HttpGet("count")]
     [ProducesResponseType(typeof(ApiResponse<WareHouseCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] WareHouseFilter request)
@@ -87,4 +93,6 @@ public class WareHouseController(WareHouseService service) : ControllerBase
         var total = await service.CountAsync(request);
         return ProjectController.Respond(new WareHouseCountResponse { Total = total });
     }
+
+    #endregion
 }

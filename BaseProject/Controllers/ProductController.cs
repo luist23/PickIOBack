@@ -13,14 +13,18 @@ namespace BaseProject.Controllers;
 [Route(Routes.ProductApiRoute)]
 public class ProductController(ProductService service) : ControllerBase
 {
+    #region Get All
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<ProductDto>), 200)]
+    [ProducesResponseType(typeof(ApiPaginationResponse<ProductDto>), 200)]
     public JsonResult Get([FromQuery] ProductFilter request)
     {
         var query = service.GetAll(request)
             .Select(ProductMapper.Projection);
         return ProjectController.RespondPagination(query, request);
     }
+
+    #endregion
 
     [HttpGet("{code}")]
     [ProducesResponseType(typeof(ProductDto), 200)]
@@ -80,6 +84,8 @@ public class ProductController(ProductService service) : ControllerBase
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
 
+    #region Count
+
     [HttpGet("count")]
     [ProducesResponseType(typeof(ApiResponse<ProductCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] ProductFilter request)
@@ -87,4 +93,6 @@ public class ProductController(ProductService service) : ControllerBase
         var total = await service.CountAsync(request);
         return ProjectController.Respond(new ProductCountResponse { Total = total });
     }
+
+    #endregion
 }

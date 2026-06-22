@@ -13,14 +13,18 @@ namespace BaseProject.Controllers;
 [Route(Routes.ProviderApiRoute)]
 public class ProviderController(ProviderService service) : ControllerBase
 {
+    #region Get All
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<ProviderDto>), 200)]
+    [ProducesResponseType(typeof(ApiPaginationResponse<ProviderDto>), 200)]
     public JsonResult Get([FromQuery] ProviderFilter request)
     {
         var query = service.GetAll(request)
             .Select(ProviderMapper.Projection);
         return ProjectController.RespondPagination(query, request);
     }
+
+    #endregion
 
     [HttpGet("{code}")]
     [ProducesResponseType(typeof(ProviderDto), 200)]
@@ -80,6 +84,8 @@ public class ProviderController(ProviderService service) : ControllerBase
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
 
+    #region Count
+
     [HttpGet("count")]
     [ProducesResponseType(typeof(ApiResponse<ProviderCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] ProviderFilter request)
@@ -87,4 +93,6 @@ public class ProviderController(ProviderService service) : ControllerBase
         var total = await service.CountAsync(request);
         return ProjectController.Respond(new ProviderCountResponse { Total = total });
     }
+
+    #endregion
 }

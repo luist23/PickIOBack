@@ -30,7 +30,8 @@ public class AuthController(AuthService authService) : ControllerBase
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var session = User.FindFirstValue("session_token");
-        if (userId == null || session == null) return ProjectController.Reject("No se encontro usuario", ApiCodes.ErrorCode.UnAuthorized);
+        if (userId == null || session == null)
+            return ProjectController.Reject("No se encontro usuario", ApiCodes.ErrorCode.UnAuthorized);
         var res = await authService.Logout(userId, session);
         return ProjectController.JsonResponse<string>(res);
     }

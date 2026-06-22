@@ -13,14 +13,18 @@ namespace BaseProject.Controllers;
 [Route(Routes.BranchOfficeApiRoute)]
 public class BranchOfficeController(BranchOfficeService service) : ControllerBase
 {
+    #region Get All
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<BranchOfficeDto>), 200)]
+    [ProducesResponseType(typeof(ApiPaginationResponse<BranchOfficeDto>), 200)]
     public JsonResult Get([FromQuery] BranchOfficeFilter request)
     {
         var query = service.GetAll(request)
             .Select(BranchOfficeMapper.Projection);
         return ProjectController.RespondPagination(query, request);
     }
+
+    #endregion
 
     [HttpGet("{code}")]
     [ProducesResponseType(typeof(BranchOfficeDto), 200)]
@@ -78,6 +82,8 @@ public class BranchOfficeController(BranchOfficeService service) : ControllerBas
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
 
+    #region Count
+
     [HttpGet("count")]
     [ProducesResponseType(typeof(ApiResponse<BranchOfficeCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] BranchOfficeFilter request)
@@ -85,4 +91,6 @@ public class BranchOfficeController(BranchOfficeService service) : ControllerBas
         var total = await service.CountAsync(request);
         return ProjectController.Respond(new BranchOfficeCountResponse { Total = total });
     }
+
+    #endregion
 }

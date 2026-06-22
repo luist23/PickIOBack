@@ -19,7 +19,7 @@ public static class ProjectController
         ApiCodes.SuccessCode code = ApiCodes.SuccessCode.Ok) where T : class
     {
         var meta = new Metadata(paginationRequest, list.Count());
-        var value = new ApiPaginationResponse<List<T>>(
+        var value = new ApiPaginationResponse<T>(
             Paginate(meta, list),
             meta
         );
@@ -30,7 +30,7 @@ public static class ProjectController
         ApiCodes.SuccessCode code = ApiCodes.SuccessCode.Ok) where T : class
     {
         var meta = new Metadata(paginationRequest, list.Count());
-        var value = new ApiPaginationResponse<List<T>>(
+        var value = new ApiPaginationResponse<T>(
             Paginate(meta, list),
             meta
         );
@@ -90,7 +90,7 @@ public static class ProjectController
         };
     }
 
-    public static IQueryable Paginate<T>(Metadata request, IOrderedQueryable<T> list)
+    public static IQueryable<T> Paginate<T>(Metadata request, IOrderedQueryable<T> list)
     {
         if (request.Size == 0)
         {
@@ -103,7 +103,7 @@ public static class ProjectController
         return pagination;
     }
 
-    public static IQueryable Paginate<T>(Metadata request, IQueryable<T> list)
+    public static IQueryable<T> Paginate<T>(Metadata request, IQueryable<T> list)
     {
         if (request.Size == 0)
         {

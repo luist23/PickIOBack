@@ -13,14 +13,18 @@ namespace BaseProject.Controllers;
 [Route(Routes.BarcodeApiRoute)]
 public class BarCodeController(BarCodeService service) : ControllerBase
 {
+    #region Get All
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<BarCodeDto>), 200)]
+    [ProducesResponseType(typeof(ApiPaginationResponse<BarCodeDto>), 200)]
     public JsonResult Get([FromQuery] BarCodeFilter request)
     {
         var query = service.GetAll(request)
             .Select(BarCodeMapper.Projection);
         return ProjectController.RespondPagination(query, request);
     }
+
+    #endregion
 
     [HttpGet("{code}")]
     [ProducesResponseType(typeof(BarCodeDto), 200)]
@@ -78,6 +82,8 @@ public class BarCodeController(BarCodeService service) : ControllerBase
         return ProjectController.JsonResponse<string>(await service.Destroy(code));
     }
 
+    #region Count
+
     [HttpGet("count")]
     [ProducesResponseType(typeof(ApiResponse<BarCodeCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] BarCodeFilter request)
@@ -85,4 +91,6 @@ public class BarCodeController(BarCodeService service) : ControllerBase
         var total = await service.CountAsync(request);
         return ProjectController.Respond(new BarCodeCountResponse { Total = total });
     }
+
+    #endregion
 }

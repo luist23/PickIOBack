@@ -13,8 +13,10 @@ namespace BaseProject.Controllers;
 [Route(Routes.SaleOrderApiRoute)]
 public class SaleOrderController(SaleOrderService service) : ControllerBase
 {
+    #region Get All
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<SaleOrderDto>), 200)]
+    [ProducesResponseType(typeof(ApiPaginationResponse<SaleOrderDto>), 200)]
     public JsonResult Get([FromQuery] SaleOrderFilter request)
     {
         var query = service.GetAll(request)
@@ -22,8 +24,12 @@ public class SaleOrderController(SaleOrderService service) : ControllerBase
         return ProjectController.RespondPagination(query, request);
     }
 
+    #endregion
+
+    #region Get Id
+
     [HttpGet("{id:int}")]
-    [ProducesResponseType(typeof(SaleOrderDto), 200)]
+    [ProducesResponseType(typeof(ApiResponse<SaleOrderDto>), 200)]
     [ProducesResponseType(typeof(IEnumerable<ApiError>), 400)]
     public async Task<JsonResult> Get(int id)
     {
@@ -35,6 +41,8 @@ public class SaleOrderController(SaleOrderService service) : ControllerBase
 
         return ProjectController.JsonResponse<SaleOrder>(result);
     }
+
+    #endregion
 
     [HttpPost]
     [ProducesResponseType(typeof(SaleOrderDto), 200)]
@@ -80,6 +88,8 @@ public class SaleOrderController(SaleOrderService service) : ControllerBase
         return ProjectController.JsonResponse<string>(await service.Destroy(id));
     }
 
+    #region Count
+
     [HttpGet("count")]
     [ProducesResponseType(typeof(ApiResponse<SaleOrderCountResponse>), 200)]
     public async Task<JsonResult> Count([FromQuery] SaleOrderFilter request)
@@ -87,4 +97,6 @@ public class SaleOrderController(SaleOrderService service) : ControllerBase
         var total = await service.CountAsync(request);
         return ProjectController.Respond(new SaleOrderCountResponse { Total = total });
     }
+
+    #endregion
 }
