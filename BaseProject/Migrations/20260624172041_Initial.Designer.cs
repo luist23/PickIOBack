@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseProject.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20260415194933_Initial")]
+    [Migration("20260624172041_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -480,6 +480,17 @@ namespace BaseProject.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnOrder(2);
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ReplacementSerial")
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("SaleOrderId", "ItemCode", "Serial");
 

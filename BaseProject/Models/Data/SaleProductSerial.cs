@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BaseProject.Models.Attributes;
+using BaseProject.Models.Enums;
 
 namespace BaseProject.Models.Data;
 
@@ -17,4 +18,12 @@ public class SaleProductSerial
     [AttMaxLength(50)]
     [Key, Column(Order = 2)]
     public string Serial { get; set; } = string.Empty;
+    
+    public ProductSerialStatus Status { get; set; } = ProductSerialStatus.Pending;
+    
+    [AttMaxLength(100)]
+    public string? Comments { get; set; } = string.Empty;
+    
+    [AttMaxLength(50)]
+    public string? ReplacementSerial { get; set; }
 }

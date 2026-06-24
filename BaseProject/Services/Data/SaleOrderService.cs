@@ -3,6 +3,7 @@ using BaseProject.Models.Contracts;
 using BaseProject.Models.Contracts.Dtos;
 using BaseProject.Models.Contracts.Responses;
 using BaseProject.Models.Data;
+using BaseProject.Models.Enums;
 using BaseProject.Models.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,39 +16,42 @@ public class SaleOrderService(ProjectDbContext context)
         return await GetAll(filter).CountAsync();
     }
 
-    public IOrderedQueryable<SaleOrder> GetAll(SaleOrderFilter filter)
+    public IOrderedQueryable<SaleOrder> GetAll(SaleOrderFilter filter, bool pending = false)
     {
         var query = context.SaleOrders.AsQueryable();
         var lastSync = filter.LastSync;
         var status = filter.Status;
-        
+
         if (lastSync.HasValue)
         {
-             query = query.Where(x => x.UpdatedAt > lastSync.Value);
+            query = query.Where(x => x.UpdatedAt > lastSync.Value);
         }
-        
-        if (status.HasValue)
+
+        query = pending switch
         {
-            query = query.Where(x => x.Status == status.Value);
-        }
+            false when status.HasValue => query.Where(x => x.Status == status.Value),
+            true => query.Where(x => x.Status == OrderStatus.Paused || x.Status == OrderStatus.Pending),
+            _ => query
+        };
 
         return query.OrderBy(x => x.Id);
     }
-    
+
     public async Task<ResultResponse> GetById(int id)
     {
         var saleOrder = await context.SaleOrders
             .Include(x => x.Products)
             .Include(x => x.ProductSerials)
             .FirstOrDefaultAsync(x => x.Id == id);
-            
+
         if (saleOrder == null)
         {
             return new ResultResponse.Error("SaleOrder not found");
         }
+
         return new ResultResponse.Success<SaleOrder>(saleOrder);
     }
-    
+
     public async Task<ResultResponse> Create(SaleOrderDto dto)
     {
         if (await context.SaleOrders.AnyAsync(x => x.Id == dto.Id))
@@ -56,31 +60,31 @@ public class SaleOrderService(ProjectDbContext context)
         }
 
         var saleOrder = dto.ToEntity();
-        
+
         // Handle initial Status Updates if any provided (though unusual on create for logs, but possible)
-        if (dto.StatusUpdates.Any())
+        if (dto.StatusUpdates.Count != 0)
         {
-             await SaveStatusUpdates(dto.StatusUpdates);
+            await SaveStatusUpdates(dto.StatusUpdates);
         }
 
         await context.SaleOrders.AddAsync(saleOrder);
         await context.SaveChangesAsync();
-        
+
         return new ResultResponse.Success<SaleOrder>(saleOrder);
     }
-    
+
     public async Task<ResultResponse> Update(int id, SaleOrderDto dto)
     {
         var existing = await context.SaleOrders
             .Include(x => x.Products)
             .Include(x => x.ProductSerials)
             .FirstOrDefaultAsync(x => x.Id == id);
-            
+
         if (existing == null)
         {
             return new ResultResponse.Error("SaleOrder not found");
         }
-        
+
         // Update Order fields
         existing.CustomerCode = dto.CustomerCode;
         existing.Transference = dto.Transference;
@@ -89,22 +93,22 @@ public class SaleOrderService(ProjectDbContext context)
         existing.SyncUser = dto.SyncUser;
         existing.UserId = dto.UserId;
         existing.Status = dto.Status;
-        
+
         // Update Products
         UpdateProducts(existing, dto.Products);
-        
+
         // Update Product Serials
         UpdateProductSerials(existing, dto.ProductSerials);
-        
+
         // Handle Status Updates (Logs)
-        if (dto.StatusUpdates.Any())
+        if (dto.StatusUpdates.Count != 0)
         {
             await SaveStatusUpdates(dto.StatusUpdates);
         }
-        
+
         context.SaleOrders.Update(existing);
         await context.SaveChangesAsync();
-        
+
         return new ResultResponse.Success<SaleOrder>(existing);
     }
 
@@ -113,13 +117,13 @@ public class SaleOrderService(ProjectDbContext context)
         // Identify products to remove
         var incomingProductCodes = incomingProducts.Select(p => p.ItemCode).ToHashSet();
         var productsToRemove = existing.Products.Where(p => !incomingProductCodes.Contains(p.ItemCode)).ToList();
-        
+
         foreach (var productToRemove in productsToRemove)
         {
             existing.Products.Remove(productToRemove);
             context.SaleProducts.Remove(productToRemove);
         }
-        
+
         // Identify products to add or update
         foreach (var productDto in incomingProducts)
         {
@@ -157,59 +161,64 @@ public class SaleOrderService(ProjectDbContext context)
         // Identify serials to remove (composite key ItemCode + Serial)
         // Simple approach: remove all and re-add? Or precise diff. 
         // Precise diff: Key is (SaleOrderId, ItemCode, Serial).
-        
+
         var incomingKeys = incomingSerials.Select(s => $"{s.ItemCode}|{s.Serial}").ToHashSet();
-        var serialsToRemove = existing.ProductSerials.Where(s => !incomingKeys.Contains($"{s.ItemCode}|{s.Serial}")).ToList();
-        
+        var serialsToRemove = existing.ProductSerials.Where(s => !incomingKeys.Contains($"{s.ItemCode}|{s.Serial}"))
+            .ToList();
+
         foreach (var serialToRemove in serialsToRemove)
         {
             existing.ProductSerials.Remove(serialToRemove);
             context.SaleProductSerials.Remove(serialToRemove);
         }
-        
+
         foreach (var serialDto in incomingSerials)
         {
-             // Check if exists
-             if (!existing.ProductSerials.Any(s => s.ItemCode == serialDto.ItemCode && s.Serial == serialDto.Serial))
-             {
-                 existing.ProductSerials.Add(new SaleProductSerial
-                 {
-                     SaleOrderId = existing.Id,
-                     ItemCode = serialDto.ItemCode,
-                     Serial = serialDto.Serial
-                 });
-             }
-             // No update logic needed for Serial entity usually as it's just keys, unless there are other fields. 
-             // SaleProductSerial only has keys and Serial string.
+            var exist = existing.ProductSerials.FirstOrDefault(s =>
+                s.ItemCode == serialDto.ItemCode && s.Serial == serialDto.Serial);
+
+            if (exist == null)
+                existing.ProductSerials.Add(new SaleProductSerial
+                {
+                    SaleOrderId = existing.Id,
+                    ItemCode = serialDto.ItemCode,
+                    Serial = serialDto.Serial
+                });
+            else
+            {
+                exist.ReplacementSerial = serialDto.ReplacementSerial;
+                exist.Comments = serialDto.Comments;
+                exist.Status = serialDto.Status;
+            }
         }
     }
 
     private async Task SaveStatusUpdates(List<SaleOrderStatusDto> statusUpdates)
     {
-         foreach (var update in statusUpdates)
-         {
-             // Check if this specific status log already exists? 
-             // Log usually is append-only. 
-             // We might want to check duplicate by (IdOrder, Status, Time, UserId) or similar if needed, 
-             // but usually logs are just added.
-             
-             // However, to be safe and avoid duplicates if client retries:
-             // Assuming no unique capability other than all fields.
-             // Maybe check if exists with same Time?
-             
-             var exists = await context.SaleOrderStatutes.AnyAsync(x => 
-                 x.IdOrder == update.IdOrder && 
-                 x.Status == update.Status && 
-                 x.Time == update.Time && // DateTime comparison might be tricky with precision
-                 x.UserId == update.UserId);
-                 
-             if (!exists)
-             {
-                 await context.SaleOrderStatutes.AddAsync(update.ToEntity());
-             }
-         }
+        foreach (var update in statusUpdates)
+        {
+            // Check if this specific status log already exists? 
+            // Log usually is append-only. 
+            // We might want to check duplicate by (IdOrder, Status, Time, UserId) or similar if needed, 
+            // but usually logs are just added.
+
+            // However, to be safe and avoid duplicates if client retries:
+            // Assuming no unique capability other than all fields.
+            // Maybe check if exists with same Time?
+
+            var exists = await context.SaleOrderStatutes.AnyAsync(x =>
+                x.IdOrder == update.IdOrder &&
+                x.Status == update.Status &&
+                x.Time == update.Time && // DateTime comparison might be tricky with precision
+                x.UserId == update.UserId);
+
+            if (!exists)
+            {
+                await context.SaleOrderStatutes.AddAsync(update.ToEntity());
+            }
+        }
     }
-    
+
     public async Task<ResultResponse> Delete(int id)
     {
         var existing = await context.SaleOrders.FindAsync(id);
@@ -217,12 +226,13 @@ public class SaleOrderService(ProjectDbContext context)
         {
             return new ResultResponse.Error("SaleOrder not found");
         }
+
         existing.Delete(existing.DeletedAt == null);
         await context.SaveChangesAsync();
-        
+
         return new ResultResponse.Success<SaleOrder>(existing);
     }
-    
+
     public async Task<ResultResponse> Destroy(int id)
     {
         var existing = await context.SaleOrders.FindAsync(id);
@@ -230,9 +240,10 @@ public class SaleOrderService(ProjectDbContext context)
         {
             return new ResultResponse.Error("SaleOrder not found");
         }
+
         context.SaleOrders.Remove(existing);
         await context.SaveChangesAsync();
-        
+
         return new ResultResponse.Success<string>("SaleOrder deleted");
     }
 }

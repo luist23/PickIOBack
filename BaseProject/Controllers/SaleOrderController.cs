@@ -24,6 +24,15 @@ public class SaleOrderController(SaleOrderService service) : ControllerBase
         return ProjectController.RespondPagination(query, request);
     }
 
+    [HttpGet("/pending")]
+    [ProducesResponseType(typeof(ApiPaginationResponse<SaleOrderDto>), 200)]
+    public JsonResult GetPending([FromQuery] SaleOrderFilter request)
+    {
+        var query = service.GetAll(request, true)
+            .Select(SaleOrderMapper.Projection);
+        return ProjectController.RespondPagination(query, request);
+    }
+
     #endregion
 
     #region Get Id

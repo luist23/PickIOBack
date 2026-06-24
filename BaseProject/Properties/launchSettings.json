@@ -27,6 +27,10 @@
       "commandName": "Project",
       "commandLineArgs": "seeders"
     },
+    "seeder-test": {
+      "commandName": "Project",
+      "commandLineArgs": "seeders-test"
+    },
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,

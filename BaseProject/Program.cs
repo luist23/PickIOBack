@@ -51,6 +51,14 @@ internal static class Program
             await RoleSeeder.SeedAsync(serviceProvider);
             return false;
         }
+        
+        if (args.Contains("seeders-test"))
+        {
+            var serviceProvider = builder.Build().Services;
+            await RoleSeeder.SeedAsync(serviceProvider);
+            await TestSeeder.SeedAsync(serviceProvider);
+            return false;
+        }
 
         return true;
     }

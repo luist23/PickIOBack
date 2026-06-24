@@ -470,7 +470,10 @@ namespace BaseProject.Migrations
                 {
                     SaleOrderId = table.Column<int>(type: "INTEGER", nullable: false),
                     ItemCode = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
-                    Serial = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
+                    Serial = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    Comments = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    ReplacementSerial = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
